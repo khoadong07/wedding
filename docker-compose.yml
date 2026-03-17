@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  wedding-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wedding-invitation
+    ports:
+      - "13000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - wedding-network
+
+networks:
+  wedding-network:
+    driver: bridge

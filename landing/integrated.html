@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Cưới Đức & Hạnh</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="../wendola2/bootstrap.min.css" rel="stylesheet">
+    <link href="../wendola2/style.css" rel="stylesheet">
+    <link href="../wendola2/magnific-popup.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Landing page styles */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
+
+        .vs-cc {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f0f8f0;
+        }
+
+        .vs-cc-backdrop { position: absolute; inset: 0; }
+
+        /* Sparkles */
+        .vs-cc-sparkle {
+            position: absolute;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            pointer-events: none;
+            animation: vsCcSparkle 3s ease-in-out infinite;
+        }
+        .vs-cc-sparkle:nth-child(2) { top: 15%; left: 18%; animation-delay: 0s; }
+        .vs-cc-sparkle:nth-child(3) { top: 28%; right: 12%; animation-delay: 0.8s; width: 3px; height: 3px; }
+        .vs-cc-sparkle:nth-child(4) { bottom: 22%; left: 14%; animation-delay: 1.6s; width: 5px; height: 5px; }
+        .vs-cc-sparkle:nth-child(5) { bottom: 32%; right: 20%; animation-delay: 2.4s; }
+
+        @keyframes vsCcSparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Floating petals */
+        .vs-cc-petal {
+            position: absolute;
+            width: 10px; height: 10px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .vs-cc-petal svg { width: 100%; height: 100%; }
+        .vs-cc-petal:nth-child(6) { top: 10%; right: 8%; animation: vsCcPetal1 6s ease-in-out infinite; }
+        .vs-cc-petal:nth-child(7) { top: 18%; left: 10%; animation: vsCcPetal2 8s ease-in-out infinite 1s; width: 8px; height: 8px; }
+        .vs-cc-petal:nth-child(8) { bottom: 18%; right: 12%; animation: vsCcPetal1 7s ease-in-out infinite 2s; width: 7px; height: 7px; }
+
+        @keyframes vsCcPetal1 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(15deg); }
+        }
+        @keyframes vsCcPetal2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(-12deg); }
+        }
+
+        /* Card */
+        .vs-cc-card {
+            position: relative;
+            z-index: 1;
+            width: 82%;
+            max-width: 320px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 28px 20px;
+            background: #f4f7f0;
+        }
+
+        .vs-cc-card-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        /* Corner decorations */
+        .vs-cc-corner-tl, .vs-cc-corner-tr, .vs-cc-corner-bl, .vs-cc-corner-br {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .vs-cc-corner-tl svg, .vs-cc-corner-tr svg, .vs-cc-corner-bl svg, .vs-cc-corner-br svg {
+            width: 100%; height: 100%;
+        }
+        .vs-cc-corner-tl { top: 4px; left: 4px; }
+        .vs-cc-corner-tr { top: 4px; right: 4px; }
+        .vs-cc-corner-bl { bottom: 4px; left: 4px; }
+        .vs-cc-corner-br { bottom: 4px; right: 4px; }
+
+        .vs-cc-card-inner {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Heart */
+        .vs-cc-heart {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: vsCcPulse 2s ease-in-out infinite;
+            background: #5c6b4f;
+        }
+        .vs-cc-heart svg { width: 18px; height: 18px; fill: white; }
+        @keyframes vsCcPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Names */
+        .vs-cc-names {
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+            padding: 0 8px;
+            font-family: 'Playfair Display', serif;
+            color: #3a4a30;
+        }
+
+        /* Divider */
+        .vs-cc-divider {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 80%;
+        }
+        .vs-cc-divider-line { flex: 1; height: 1px; opacity: 0.5; background: #8a9e78; }
+        .vs-cc-divider-icon { width: 12px; height: 12px; flex-shrink: 0; }
+        .vs-cc-divider-icon svg { width: 100%; height: 100%; fill: #5c6b4f; }
+
+        /* Date */
+        .vs-cc-date {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #5c6b4f;
+        }
+
+        /* Invite text */
+        .vs-cc-invite {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #3a4a30;
+        }
+
+        /* Guest name */
+        .vs-cc-guest {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #5c6b4f;
+        }
+
+        /* Button */
+        .vs-cc-btn {
+            margin-top: 4px;
+            padding: 8px 28px;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            background: #5c6b4f;
+        }
+        .vs-cc-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Sage theme colors */
+        .vs-cc[data-theme="sage"] .vs-cc-backdrop { background: #5c6b4f; }
+        .vs-cc[data-theme="sage"] .vs-cc-petal svg { fill: #8a9e78; }
+
+        /* Envelope animation */
+        .vs-cc[data-animation="envelope"].vs-cc-opening .vs-cc-card {
+            animation: vsCcEnvelope 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform-origin: top center;
+        }
+        .vs-cc[data-animation="envelope"].vs-cc-opening .vs-cc-backdrop,
+        .vs-cc[data-animation="envelope"].vs-cc-opening .vs-cc-petal {
+            animation: vsCcFadeOut 0.4s 0.6s ease forwards;
+        }
+        @keyframes vsCcEnvelope {
+            0% { transform: perspective(800px) rotateX(0); opacity: 1; }
+            40% { transform: perspective(800px) rotateX(-30deg) translateY(-20px); opacity: 1; }
+            100% { transform: perspective(800px) rotateX(-90deg) translateY(-80px); opacity: 0; }
+        }
+        @keyframes vsCcFadeOut { to { opacity: 0; } }
+
+        /* Wedding content styles */
+        #wedding-content {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #5c6b4f;
+        }
+
+        /* Hide landing when wedding content is shown */
+        .wedding-active .vs-cc {
+            display: none !important;
+        }
+        .wedding-active #wedding-content {
+            display: block !important;
+        }
+
+        /* QR Code Styles */
+        .vs-qr-content.vs-hidden { display: none; }
+        .vs-qr-content.vs-reveal { animation: qr-reveal 0.4s ease-out; }
+        @keyframes qr-reveal { 
+            from { opacity: 0; transform: translateY(-8px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        @keyframes vs-envelope-shake {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(-3deg); }
+            20% { transform: rotate(3deg); }
+            30% { transform: rotate(-2deg); }
+            40% { transform: rotate(2deg); }
+            50% { transform: rotate(0deg); }
+        }
+
+        .vs-envelope-shake {
+            animation: vs-envelope-shake 2.5s ease-in-out infinite !important;
+        }
+
+        .vs-qr-btn {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .vs-qr-close {
+            cursor: pointer;
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 25px;
+            background: rgba(0,0,0,0.08);
+            color: #666;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .vs-qr-close:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="vs-cc" data-theme="sage" data-animation="envelope">
+        <div class="vs-cc-backdrop"></div>
+        <div class="vs-cc-sparkle"></div>
+        <div class="vs-cc-sparkle"></div>
+        <div class="vs-cc-sparkle"></div>
+        <div class="vs-cc-sparkle"></div>
+        <div class="vs-cc-petal">
+            <svg viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="4"></circle>
+                <circle cx="10" cy="3" r="3"></circle>
+                <circle cx="17" cy="10" r="3"></circle>
+                <circle cx="10" cy="17" r="3"></circle>
+                <circle cx="3" cy="10" r="3"></circle>
+            </svg>
+        </div>
+        <div class="vs-cc-petal">
+            <svg viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="4"></circle>
+                <circle cx="10" cy="3" r="3"></circle>
+                <circle cx="17" cy="10" r="3"></circle>
+                <circle cx="10" cy="17" r="3"></circle>
+                <circle cx="3" cy="10" r="3"></circle>
+            </svg>
+        </div>
+        <div class="vs-cc-petal">
+            <svg viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="4"></circle>
+                <circle cx="10" cy="3" r="3"></circle>
+                <circle cx="17" cy="10" r="3"></circle>
+                <circle cx="10" cy="17" r="3"></circle>
+                <circle cx="3" cy="10" r="3"></circle>
+            </svg>
+        </div>
+        <div class="vs-cc-card">
+            <div class="vs-cc-card-bg"></div>
+            <div class="vs-cc-corner-tl">
+                <svg viewBox="0 0 90 90" fill="#5c6b4f" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 85 Q10 55 25 38 Q40 22 70 10" stroke="#5c6b4f" stroke-width="1.5" fill="none" opacity="0.5"></path>
+                    <ellipse cx="18" cy="55" rx="10" ry="6" transform="rotate(-50 18 55)" opacity="0.4"></ellipse>
+                    <ellipse cx="28" cy="40" rx="11" ry="6" transform="rotate(-40 28 40)" opacity="0.45"></ellipse>
+                    <ellipse cx="40" cy="28" rx="10" ry="5.5" transform="rotate(-30 40 28)" opacity="0.4"></ellipse>
+                    <ellipse cx="55" cy="18" rx="9" ry="5" transform="rotate(-20 55 18)" opacity="0.35"></ellipse>
+                    <ellipse cx="68" cy="12" rx="8" ry="4.5" transform="rotate(-10 68 12)" opacity="0.3"></ellipse>
+                </svg>
+            </div>
+            <div class="vs-cc-corner-tr" style="transform: scaleX(-1);">
+                <svg viewBox="0 0 90 90" fill="#5c6b4f" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 85 Q10 55 25 38 Q40 22 70 10" stroke="#5c6b4f" stroke-width="1.5" fill="none" opacity="0.5"></path>
+                    <ellipse cx="18" cy="55" rx="10" ry="6" transform="rotate(-50 18 55)" opacity="0.4"></ellipse>
+                    <ellipse cx="28" cy="40" rx="11" ry="6" transform="rotate(-40 28 40)" opacity="0.45"></ellipse>
+                    <ellipse cx="40" cy="28" rx="10" ry="5.5" transform="rotate(-30 40 28)" opacity="0.4"></ellipse>
+                    <ellipse cx="55" cy="18" rx="9" ry="5" transform="rotate(-20 55 18)" opacity="0.35"></ellipse>
+                    <ellipse cx="68" cy="12" rx="8" ry="4.5" transform="rotate(-10 68 12)" opacity="0.3"></ellipse>
+                </svg>
+            </div>
+            <div class="vs-cc-corner-bl" style="transform: scaleY(-1);">
+                <svg viewBox="0 0 90 90" fill="#5c6b4f" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 85 Q10 55 25 38 Q40 22 70 10" stroke="#5c6b4f" stroke-width="1.5" fill="none" opacity="0.5"></path>
+                    <ellipse cx="18" cy="55" rx="10" ry="6" transform="rotate(-50 18 55)" opacity="0.4"></ellipse>
+                    <ellipse cx="28" cy="40" rx="11" ry="6" transform="rotate(-40 28 40)" opacity="0.45"></ellipse>
+                    <ellipse cx="40" cy="28" rx="10" ry="5.5" transform="rotate(-30 40 28)" opacity="0.4"></ellipse>
+                    <ellipse cx="55" cy="18" rx="9" ry="5" transform="rotate(-20 55 18)" opacity="0.35"></ellipse>
+                    <ellipse cx="68" cy="12" rx="8" ry="4.5" transform="rotate(-10 68 12)" opacity="0.3"></ellipse>
+                </svg>
+            </div>
+            <div class="vs-cc-corner-br" style="transform: scale(-1);">
+                <svg viewBox="0 0 90 90" fill="#5c6b4f" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 85 Q10 55 25 38 Q40 22 70 10" stroke="#5c6b4f" stroke-width="1.5" fill="none" opacity="0.5"></path>
+                    <ellipse cx="18" cy="55" rx="10" ry="6" transform="rotate(-50 18 55)" opacity="0.4"></ellipse>
+                    <ellipse cx="28" cy="40" rx="11" ry="6" transform="rotate(-40 28 40)" opacity="0.45"></ellipse>
+                    <ellipse cx="40" cy="28" rx="10" ry="5.5" transform="rotate(-30 40 28)" opacity="0.4"></ellipse>
+                    <ellipse cx="55" cy="18" rx="9" ry="5" transform="rotate(-20 55 18)" opacity="0.35"></ellipse>
+                    <ellipse cx="68" cy="12" rx="8" ry="4.5" transform="rotate(-10 68 12)" opacity="0.3"></ellipse>
+                </svg>
+            </div>
+            <div class="vs-cc-card-inner">
+                <div class="vs-cc-heart">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                </div>
+                <div class="vs-cc-names">Đức & Hạnh</div>
+                <div class="vs-cc-divider">
+                    <div class="vs-cc-divider-line"></div>
+                    <div class="vs-cc-divider-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                        </svg>
+                    </div>
+                    <div class="vs-cc-divider-line"></div>
+                </div>
+                <div class="vs-cc-date">10 tháng 10, 2026</div>
+                <div class="vs-cc-invite">Kính Mời</div>
+                <div class="vs-cc-guest">Anh Phong & gia đình</div>
+                <button type="button" class="vs-cc-btn" onclick="openWedding()">Mở thiệp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wedding Content Container -->
+    <div id="wedding-content">
+        <div class="loading">Đang tải...</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../wendola2/jquery.js"></script>
+    <script src="../wendola2/jquery-plugin-collection.js"></script>
+    <script src="../wendola2/popper.min.js"></script>
+    <script src="../wendola2/bootstrap.min.js"></script>
+    <script src="../wendola2/jquery.countdown.js"></script>
+    <script src="../wendola2/swiper.min.js"></script>
+    <script src="../wendola2/wow.js"></script>
+    <script src="../wendola2/appear.js"></script>
+    <script src="../wendola2/owl.js"></script>
+    <script src="../wendola2/script.js"></script>
+
+    <script>
+        function openWedding() {
+            // Add opening animation class
+            document.querySelector('.vs-cc').classList.add('vs-cc-opening');
+            
+            // Load wedding content after animation
+            setTimeout(() => {
+                loadWeddingContent();
+            }, 1000); // Wait for animation to complete
+        }
+
+        function loadWeddingContent() {
+            // Add class to body to show wedding content
+            document.body.classList.add('wedding-active');
+            
+            // Directly insert wedding content instead of fetching
+            const weddingHTML = `
+                <div id="music-control" class="playing"><img src="../images/playing.png"></div>
+                <div class="page-wrapper">
+                    <section id="home" class="banner-section-two">
+                        <div class="icon-flowers-1 bounce-y"></div>
+                        <div class="icon-flowers-2 bounce-y wow animated" data-wow-delay="4s"></div>
+                        <div class="auto-container">
+                            <div class="row">
+                                <div class="content-column col-lg-6 col-md-12 col-sm-12 order-lg-2 wow fadeInUp">
+                                    <div class="inner-column">
+                                        <span class="sub-title wow fadeInUp" data-wow-delay="900ms">TỤI MÌNH CƯỚI</span>
+                                        <h2 class="name wow fadeInUp" data-wow-delay="1200ms">
+                                            <span class="people-name">Thanh Hằng</span><br>
+                                            <span>&</span><br>
+                                            <span class="people-name">Đăng Khoa</span>
+                                        </h2>
+                                        <div class="date wow fadeInUp" data-wow-delay="1500ms">29 Tháng 03, 2026</div>
+                                        <div class="address wow fadeInUp" data-wow-delay="1800ms">
+                                            <i class="icon fa fa-map-marker-alt"></i>
+                                            <span>Địa chỉ tổ chức</span>
+                                        </div>
+                                        <div class="btn-box">
+                                            <a href="#" class="theme-btn btn-style-two mt-4">
+                                                <span class="btn-title">Xem vị trí</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="image-column col-lg-3 col-md-6 col-sm-12 wow fadeInLeft" data-wow-delay="600ms">
+                                    <div class="inner-column">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../assets/A KHOA - C HANG_01.jpg" alt="Image">
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="image-column style-two col-lg-3 col-md-6 col-sm-12 order-lg-3 wow fadeInRight" data-wow-delay="600ms">
+                                    <div class="inner-column">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../assets/A KHOA - C HANG_02.jpg" alt="Image">
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="services-section-two">
+                        <div class="auto-container">
+                            <div class="row">
+                                <div class="services-block-two col-lg-4 wow fadeInUp">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../wendola2/services2-3.png" alt="Image">
+                                            </figure>
+                                        </div>
+                                        <div class="content-box">
+                                            <span class="sub-title">17:00</span>
+                                            <h4 class="title">Đón khách</h4>
+                                            <div class="text">
+                                                <span>Bắt đầu đón khách</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="services-block-two col-lg-4 wow fadeInUp" data-wow-delay="300ms">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../wendola2/services2-1.png" alt="Image">
+                                            </figure>
+                                        </div>
+                                        <div class="content-box">
+                                            <span class="sub-title">18:00</span>
+                                            <h4 class="title">Làm lễ</h4>
+                                            <div class="text">
+                                                <span>Tiến hành rước cô dâu vào sân khấu và làm lễ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="services-block-two col-lg-4 wow fadeInUp" data-wow-delay="600ms">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../wendola2/services2-2.png" alt="Image">
+                                            </figure>
+                                        </div>
+                                        <div class="content-box">
+                                            <span class="sub-title">19:00</span>
+                                            <h4 class="title">Khai tiệc</h4>
+                                            <div class="text">
+                                                <span>Bắt đầu khai tiệc</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="invitation" class="wpo-event-section section-padding">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-6 text-center d-flex flex-column align-items-center">
+                                    <div style="max-width: 500px; max-height: 500px;">
+                                        <img src="../wendola2/save-the-date.png" style="width: 100%; height: 100%; object-fit: contain;">
+                                    </div>
+                                    <h3 class="mt-5 h3">Thanh Hằng & Đăng Khoa</h3>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 card-description">
+                                    <div class="row text-center">
+                                        <div class="col-lg-4 col-4">
+                                            <h4 class="text-uppercase font-questrial">Nhà Trai</h4>
+                                            <h5 class="font-questrial mt-4">Ông: Nguyễn Minh Triết</h5>
+                                            <h5 class="font-questrial">Bà: Ngô Thu Ngân</h5>
+                                        </div>
+                                        <div class="col-lg-4 col-4">
+                                            <img src="../wendola1/flower.png" style="width: 250px; height: 100px; object-fit: contain;">
+                                        </div>
+                                        <div class="col-lg-4 col-4">
+                                            <h4 class="text-uppercase font-questrial">Nhà Gái</h4>
+                                            <h5 class="font-questrial mt-4">Ông: Nguyễn Tuấn Việt</h5>
+                                            <h5 class="font-questrial">Bà: Nguyễn Ngọc Thanh Ngân</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center mt-4">
+                                        <h3 class="font-questrial fw-bold">TRÂN TRỌNG KÍNH MỜI</h3>
+                                        <div>
+                                            <h4 class="font-questrial vs-attendance-name-text" style="font-weight: 600; display: inline;">
+                                                Bạn cùng gia đình
+                                            </h4>
+                                        </div>
+                                        <h5 class="font-questrial mt-1 fst-italic">(Tới dự Lễ Thành Hôn của hai con chúng tôi)</h5>
+                                    </div>
+                                    <div class="row mt-5 d-flex align-items-center">
+                                        <div class="col-lg-5 text-center">
+                                            <h2 class="invitator-name">Nguyễn Đăng Khoa</h2>
+                                        </div>
+                                        <div class="col-lg-2 text-center">
+                                            <img src="../wendola1/heart.png" style="width: 50px; height: 50px;">
+                                        </div>
+                                        <div class="col-lg-5 text-center bride-name">
+                                            <h2 class="invitator-name">Nguyễn Thanh Hằng</h2>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-5">
+                                        <span class="font-questrial">Tổ chức vào lúc 09 giờ 00</span>
+                                        <h4 class="fw-bold font-questrial mt-4">Thứ Tư, ngày 09 tháng 06 năm 2023</h4>
+                                        <h5 class="font-questrial mt-3 fst-italic">(Tức ngày 12 tháng 05 năm 2023 Quý Mão)</h5>
+                                        <h5 class="mt-4 font-questrial">Tại gia đình Nhà Trai:</h5>
+                                        <h5 class="fw-bold font-questrial mt-3">Lê Quang Đạo, An Đông, Thành phố Huế, Thừa Thiên Huế, Vietnam</h5>
+                                        <h5 class="font-dancing mt-3">Sự hiện diện của Quý khách là niềm vinh hạnh của gia đình tụi mình!</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="event" class="couple-section-two pt-0">
+                        <div class="icon-leave-4 bounce-y wow animated" data-wow-delay="3s"></div>
+                        <div class="auto-container">
+                            <div class="row">
+                                <div class="couple-image-block col-lg-4 col-md-12 order-lg-2 wow fadeInUp">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image overlay-anim">
+                                                <img src="../assets/A KHOA - C HANG_03.jpg" style="aspect-ratio: 329/465; object-fit: cover" alt="Image">
+                                            </figure>
+                                            <div class="icon-flower-3 bounce-y"></div>
+                                            <div class="icon-flower-4 bounce-y wow animated" data-wow-delay="3s"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="couple-block-two style-two col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay="200ms">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../assets/A KHOA - C HANG_04.jpg" alt="Image" style="aspect-ratio: 1/1; max-width: 172px; max-height: 172px; object-fit: cover;">
+                                            </figure>
+                                        </div>
+                                        <div class="content-box">
+                                            <span class="designation">Cô dâu</span>
+                                            <h4 class="name">Thanh Hằng</h4>
+                                            <div class="text">
+                                                <span>Cô dâu viết gì đi...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="couple-block-two col-lg-4 col-md-6 order-lg-3 wow fadeInRight" data-wow-delay="400ms">
+                                    <div class="inner-box">
+                                        <div class="image-box">
+                                            <figure class="image">
+                                                <img src="../assets/A KHOA - C HANG_05.jpg" alt="Image" style="aspect-ratio: 1/1; max-width: 172px; max-height: 172px; object-fit: cover;">
+                                            </figure>
+                                        </div>
+                                        <div class="content-box">
+                                            <span class="designation">Chú rể</span>
+                                            <h4 class="name">Đăng Khoa</h4>
+                                            <div class="text">
+                                                <span>Chú rể viết gì đi...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="countdown-section-two pt-0">
+                        <div class="bg bg-pattern-4"></div>
+                        <div class="anim-icons">
+                            <div class="icon-flower-3"></div>
+                            <div class="icon-flower-4"></div>
+                        </div>
+                        <div class="auto-container">
+                            <div class="sec-title text-center style-two">
+                                <span class="sub-title">Cho đến ngày</span>
+                                <h2>Về chung một nhà</h2>
+                                <div class="text">
+                                    <span>Cùng chúng mình đếm ngược nhé!</span>
+                                </div>
+                            </div>
+                            <div class="outer-box wow fadeInUp">
+                                <div class="time-counter">
+                                    <div class="time-countdown" data-countdown="12/25/2024">
+                                        <div class="counter-column">
+                                            <span class="count vs-time-days">0</span><sub>Ngày</sub>
+                                        </div>
+                                        <div class="counter-column">
+                                            <span class="count vs-time-hours">0</span><sub>Giờ</sub>
+                                        </div>
+                                        <div class="counter-column">
+                                            <span class="count vs-time-minutes">0</span><sub>Phút</sub>
+                                        </div>
+                                        <div class="counter-column">
+                                            <span class="count vs-time-seconds">0</span><sub>Giây</sub>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="gallery-section-three">
+                        <div class="bg bg-pattern-5 bounce-y"></div>
+                        <div class="auto-container">
+                            <div class="row">
+                                <div class="left-column col-lg-6 wow fadeInLeft">
+                                    <div class="sec-title style-two">
+                                        <span class="sub-title">Kỉ niệm cưới</span>
+                                        <h2 class="title">Những khoảnh khắc đáng nhớ</h2>
+                                    </div>
+                                    <div class="row">
+                                        <div class="gallery-block-three col-sm-6">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_07.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_07.jpg" style="aspect-ratio: 290/391; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-block-three col-sm-6">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_08.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_08.jpg" style="aspect-ratio: 290/391; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-block-three col-lg-12">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_09.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_09.jpg" style="aspect-ratio: 620/389; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-column col-lg-6 wow fadeInRight">
+                                    <div class="row">
+                                        <div class="gallery-block-three col-lg-12">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_10.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_10.jpg" style="aspect-ratio: 620/389; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-block-three col-sm-6">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_11.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_11.jpg" style="aspect-ratio: 290/391; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="gallery-block-three col-sm-6">
+                                            <div class="inner-box">
+                                                <figure class="image overlay-anim">
+                                                    <a href="../assets/A KHOA - C HANG_12.jpg" class="lightbox-image" data-fancybox="gallery">
+                                                        <img src="../assets/A KHOA - C HANG_12.jpg" style="aspect-ratio: 290/391; object-fit: cover" alt="Image">
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="text-block col-lg-12">
+                                            <div class="text">
+                                                <span>" Hãy để tình yêu diễn biến thật tự nhiên, đã là duyên thì cũng chẳng sợ lạc đường. "</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="gift-section services-section" style="margin-top: 50px; padding-bottom: 200px">
+                        <div class="auto-container">
+                            <div class="vs-qr-btn" style="cursor:pointer;">
+                                <div class="vs-envelope-shake" style="position:relative;display:inline-block;width:180px;height:240px;margin:0 auto;">
+                                    <svg viewBox="0 0 180 240" style="width:180px;height:240px;display:block;" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="10" y="10" width="160" height="220" rx="12" fill="#c0392b"></rect>
+                                        <rect x="10" y="85" width="160" height="70" fill="#a93226"></rect>
+                                        <text x="90" y="132" text-anchor="middle" dominant-baseline="central" style="font-size:42px;font-weight:bold;fill:#f1c40f;font-family:serif;">囍</text>
+                                        <text x="90" y="55" text-anchor="middle" style="font-size:11px;fill:#f8d98b;font-family:sans-serif;letter-spacing:2px;">MỪNG CƯỚI</text>
+                                    </svg>
+                                </div>
+                                <p style="color:#999;font-size:12px;letter-spacing:0.1em;margin-top:12px;margin-bottom:0;">Nhấn để mở</p>
+                            </div>
+                            <div class="vs-qr-content vs-hidden">
+                                <div class="sec-title text-center">
+                                    <div class="icon-divider"></div>
+                                    <span class="sub-title">Mừng cưới sớm?</span>
+                                    <h2>Đến cô dâu & chú rể</h2>
+                                    <span style="font-size: 1.25rem">Gửi mừng cưới sớm cho dâu và rể bằng mã QR dưới đây bạn yêu nhé</span>
+                                </div>
+                                <div class="text-center" style="margin-bottom: 15px;">
+                                    <span class="font-questrial" style="display: block">Số tài khoản: 123456789</span>
+                                    <span class="font-questrial mt-1" style="display: block">Chủ tài khoản: Tên cô dâu</span>
+                                    <span class="font-questrial mt-1" style="display: block">Ngân hàng: <strong>Ngân hàng</strong></span>
+                                    <img src="../wendola1/qr-code-example.webp" alt="" class="mt-4" style="width: 250px; height: 250px; object-fit: contain;">
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <span class="vs-qr-close cursor-pointer inline-block px-6 py-2 rounded-full select-none transition-all duration-300 hover:opacity-90 text-[10px] font-semibold tracking-[0.15em] uppercase" style="background:rgba(0,0,0,0.08);color:#666;">Đóng</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+            
+            // Insert the content
+            document.getElementById('wedding-content').innerHTML = weddingHTML;
+            
+            // Re-initialize scripts
+            initializeWeddingScripts();
+        }
+
+        function initializeWeddingScripts() {
+            // Wait a bit for DOM to be ready
+            setTimeout(() => {
+                // Re-initialize WOW animations
+                if (typeof WOW !== 'undefined') {
+                    new WOW().init();
+                }
+                
+                // Initialize countdown manually
+                initCountdown();
+                
+                // Initialize lightbox if available
+                if (window.jQuery && jQuery.fn.magnificPopup) {
+                    jQuery('.lightbox-image').magnificPopup({
+                        type: 'image',
+                        gallery: {
+                            enabled: true
+                        }
+                    });
+                }
+                
+                // Re-initialize QR code functionality
+                initQRCode();
+            }, 100);
+        }
+
+        function initCountdown() {
+            const countdownElement = document.querySelector('.time-countdown');
+            if (!countdownElement) return;
+            
+            const targetDate = new Date('2024-12-25T00:00:00').getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                if (distance < 0) {
+                    document.querySelector('.vs-time-days').textContent = '0';
+                    document.querySelector('.vs-time-hours').textContent = '0';
+                    document.querySelector('.vs-time-minutes').textContent = '0';
+                    document.querySelector('.vs-time-seconds').textContent = '0';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.querySelector('.vs-time-days').textContent = days;
+                document.querySelector('.vs-time-hours').textContent = hours;
+                document.querySelector('.vs-time-minutes').textContent = minutes;
+                document.querySelector('.vs-time-seconds').textContent = seconds;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function initQRCode() {
+            // QR code functionality
+            document.querySelectorAll('.vs-qr-content').forEach(function(c){
+                c.style.display='';
+                c.classList.add('vs-hidden');
+            });
+            
+            document.querySelectorAll('.vs-qr-btn').forEach(function(b){
+                var p=b.parentElement;
+                var hasContent=p.querySelector('.vs-qr-content');
+                if(!hasContent){
+                    var sib=b.nextElementSibling;
+                    while(sib){
+                        if(sib.classList&&sib.classList.contains('vs-qr-content')){
+                            hasContent=sib;break;
+                        }
+                        sib=sib.nextElementSibling;
+                    }
+                }
+                if(!hasContent){
+                    b.style.display='none';
+                    return;
+                }
+                
+                b.addEventListener('click',function(){
+                    var p=this.parentElement;
+                    var c=p.querySelector('.vs-qr-content');
+                    if(!c){
+                        var sib=this.nextElementSibling;
+                        while(sib){
+                            if(sib.classList&&sib.classList.contains('vs-qr-content')){
+                                c=sib;break;
+                            }
+                            sib=sib.nextElementSibling;
+                        }
+                    }
+                    if(c){
+                        c.classList.remove('vs-hidden');
+                        c.classList.add('vs-reveal');
+                    }
+                    this.style.display='none';
+                });
+            });
+            
+            document.querySelectorAll('.vs-qr-close').forEach(function(x){
+                x.addEventListener('click',function(){
+                    var c=this.closest('.vs-qr-content');
+                    if(c){
+                        c.classList.add('vs-hidden');
+                        c.classList.remove('vs-reveal');
+                        var p=c.parentElement;
+                        var b=p.querySelector('.vs-qr-btn');
+                        if(!b){
+                            var sib=c.previousElementSibling;
+                            while(sib){
+                                if(sib.classList&&sib.classList.contains('vs-qr-btn')){
+                                    b=sib;break;
+                                }
+                                sib=sib.previousElementSibling;
+                            }
+                        }
+                        if(b){b.style.display='';}
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
