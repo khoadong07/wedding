@@ -215,7 +215,7 @@ const QRPayment: React.FC = () => {
                   Thông tin chuyển khoản
                 </h3>
                 <p className="text-white/70">
-                  Cảm ơn bạn đã gửi lời chúc mừng đến chúng mình
+                  Cảm ơn bạn đã gửi lời chúc mừng đến tụi mình
                 </p>
               </div>
 

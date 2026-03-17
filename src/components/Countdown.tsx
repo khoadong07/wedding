@@ -129,7 +129,7 @@ const Countdown: React.FC = () => {
               Chủ Nhật, 08:00
             </p>
             <p className="text-white/70">
-              Một ngày đặc biệt trong vũ trụ tình yêu của chúng mình
+              Một ngày đặc biệt trong vũ trụ tình yêu của tụi mình
             </p>
           </div>
         </motion.div>
