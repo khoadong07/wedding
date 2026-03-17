@@ -56,8 +56,8 @@ const Couple: React.FC = () => {
               name="Thanh Hằng"
               role="Cô dâu"
               description="Một người phụ nữ dịu dàng như ánh trăng, mang trong mình sự ấm áp và yêu thương vô bờ bến."
-              imageSrc="assets/11.jpg"
-              webpSrcSet="assets/11.jpg"
+              imageSrc="images/11.jpg"
+              webpSrcSet="images/11.jpg"
               index={0}
             />
           </div>
@@ -170,7 +170,7 @@ const CoupleCard: React.FC<CoupleCardProps> = ({
                 alt={name}
                 className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                 style={name === "Thanh Hằng" ? { 
-                  transform: 'scale(2)', // Crop 120% - zoom gấp 2.4 lần
+                  transform: 'scale(1)', // Crop 120% - zoom gấp 2.4 lần
                   objectPosition: 'center center center center '
                 } : {}}
               />

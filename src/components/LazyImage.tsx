@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import { imageCache } from '../utils/imageService'
 
 interface LazyImageProps {
   src: string
@@ -29,8 +30,21 @@ const LazyImage: React.FC<LazyImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false)
   const [isInView, setIsInView] = useState(priority)
   const [hasError, setHasError] = useState(false)
+  const [cachedSrc, setCachedSrc] = useState<string>('')
   const imgRef = useRef<HTMLImageElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // Check cache on mount
+  useEffect(() => {
+    const cacheKey = `img_${src}`
+    if (imageCache.has(cacheKey)) {
+      const cached = imageCache.get(cacheKey)
+      if (cached) {
+        setCachedSrc(cached)
+        setIsLoaded(true)
+      }
+    }
+  }, [src])
 
   useEffect(() => {
     const currentImg = imgRef.current
@@ -57,16 +71,36 @@ const LazyImage: React.FC<LazyImageProps> = ({
   }, [priority])
 
   const handleImageLoad = useCallback(() => {
+    // Cache the loaded image
+    const cacheKey = `img_${src}`
+    if (!imageCache.has(cacheKey)) {
+      imageCache.set(cacheKey, src)
+    }
+    
     setIsLoaded(true)
     onLoad?.()
-  }, [onLoad])
+  }, [src, onLoad])
 
   const handleImageError = useCallback(() => {
     setHasError(true)
   }, [])
 
   return (
-    <div className={`relative overflow-hidden ${className}`} ref={imgRef} onClick={onClick}>
+    <div 
+      className={`relative overflow-hidden ${className}`} 
+      ref={imgRef} 
+      onClick={onClick}
+      onTouchEnd={onClick ? (e) => {
+        e.preventDefault()
+        onClick()
+      } : undefined}
+      style={{ 
+        touchAction: onClick ? 'manipulation' : 'auto',
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none'
+      }}
+    >
       {/* Placeholder */}
       {!isLoaded && (
         <motion.div
@@ -97,7 +131,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
       {/* Main image */}
       {isInView && (
         <motion.img
-          src={src}
+          src={cachedSrc || src}
           srcSet={srcSet}
           sizes={sizes}
           alt={alt}

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { X, ChevronLeft, ChevronRight, Sparkles, RotateCw } from 'lucide-react'
 import LazyImage from './LazyImage'
+import { preloadBackgroundImages } from '../utils/imageService'
 
 // Define PanInfo type locally to avoid import issues
 interface PanInfo {
@@ -26,36 +27,76 @@ const Gallery: React.FC = () => {
   const [isAutoRotating, setIsAutoRotating] = useState(true)
   const [displayedCount, setDisplayedCount] = useState(4)
   const [isDragging, setIsDragging] = useState(false)
+  const [tappedImage, setTappedImage] = useState<number | null>(null)
   const dragConstraintsRef = useRef<HTMLDivElement>(null)
   const [titleRef, titleInView] = useInView({
     threshold: 0.5,
     triggerOnce: true,
   })
 
-  // Memoize images để tránh re-generate - chọn 9 ảnh random từ các ảnh có sẵn
-  const images: GalleryImage[] = useMemo(() => {
-    // Sử dụng các ảnh số từ 1-40 có sẵn trong assets
-    const availableNumbers = Array.from({ length: 40 }, (_, i) => i + 1) // [1, 2, 3, ..., 40]
-    const shuffled = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random
-    const selectedNumbers = shuffled.slice(0, 9) // Chọn 9 ảnh đầu tiên
-    
-    return selectedNumbers.map((num, idx) => ({
+  // Memoize images để tránh re-generate
+  const { carouselImages, gridImages } = useMemo(() => {
+    // 9 ảnh cố định cho 3D carousel (desktop)
+    const carouselNumbers = [1, 5, 8, 12, 15, 18, 22, 25, 28] // 9 ảnh đẹp nhất
+    const carousel = carouselNumbers.map((num, idx) => ({
       id: idx + 1,
       src: `assets/${num}.jpg`,
-      webpSrcSet: `assets/${num}.jpg`, // Fallback về JPG vì không có WebP cho ảnh số
+      webpSrcSet: `assets/${num}.jpg`,
       alt: `Khoảnh khắc ${num}`,
       caption: `Khoảnh khắc ${num} trong vũ trụ tình yêu`,
     }))
+
+    // 20 ảnh random cho grid view (mobile)
+    const availableNumbers = Array.from({ length: 40 }, (_, i) => i + 1) // [1, 2, 3, ..., 40]
+    const shuffled = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random
+    const selectedNumbers = shuffled.slice(0, 20) // Chọn 20 ảnh đầu tiên
+    const grid = selectedNumbers.map((num, idx) => ({
+      id: idx + 1,
+      src: `assets/${num}.jpg`,
+      webpSrcSet: `assets/${num}.jpg`,
+      alt: `Khoảnh khắc ${num}`,
+      caption: `Khoảnh khắc ${num} trong vũ trụ tình yêu`,
+    }))
+
+    return { carouselImages: carousel, gridImages: grid }
   }, [])
 
-  const displayedImages = useMemo(() => images.slice(0, displayedCount), [images, displayedCount])
+  const displayedImages = useMemo(() => gridImages.slice(0, displayedCount), [gridImages, displayedCount])
+
+  // Preload gallery images when component mounts
+  useEffect(() => {
+    // Preload carousel images (for desktop 3D view)
+    const carouselImagePaths = carouselImages.map(img => img.src)
+    // Preload grid images (for mobile grid view)
+    const gridImagePaths = gridImages.map(img => img.src)
+    
+    // Preload carousel images immediately (smaller set, higher priority)
+    carouselImagePaths.forEach(src => {
+      const img = new Image()
+      img.src = src
+    })
+    
+    // Preload first few grid images immediately, rest in background
+    const immediate = gridImagePaths.slice(0, 6)
+    const background = gridImagePaths.slice(6)
+    
+    immediate.forEach(src => {
+      const img = new Image()
+      img.src = src
+    })
+    
+    // Preload rest in background
+    if (background.length > 0) {
+      preloadBackgroundImages(background)
+    }
+  }, [carouselImages, gridImages])
 
   // Auto rotation với useCallback
   const rotateToNext = useCallback(() => {
     if (!isDragging) {
-      setCurrentIndex((prev) => (prev + 1) % images.length)
+      setCurrentIndex((prev) => (prev + 1) % carouselImages.length)
     }
-  }, [images.length, isDragging])
+  }, [carouselImages.length, isDragging])
 
   useEffect(() => {
     if (!isAutoRotating || isDragging) return
@@ -66,13 +107,13 @@ const Gallery: React.FC = () => {
 
   const handlePrevious = useCallback(() => {
     setIsAutoRotating(false)
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-  }, [images.length])
+    setCurrentIndex((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)
+  }, [carouselImages.length])
 
   const handleNext = useCallback(() => {
     setIsAutoRotating(false)
-    setCurrentIndex((prev) => (prev + 1) % images.length)
-  }, [images.length])
+    setCurrentIndex((prev) => (prev + 1) % carouselImages.length)
+  }, [carouselImages.length])
 
   const handleImageClick = useCallback((image: GalleryImage) => {
     if (!isDragging) {
@@ -80,23 +121,41 @@ const Gallery: React.FC = () => {
     }
   }, [isDragging])
 
+  // Mobile-specific touch handlers
+  const handleMobileImageClick = useCallback((image: GalleryImage) => {
+    // Visual feedback
+    setTappedImage(image.id)
+    setTimeout(() => setTappedImage(null), 200)
+    
+    // Add small delay to ensure touch events are processed
+    setTimeout(() => {
+      if (!isDragging) {
+        setSelectedImage(image)
+      }
+    }, 50)
+  }, [isDragging])
+
   const handleLightboxPrevious = useCallback(() => {
     if (!selectedImage) return
-    const currentIdx = images.findIndex(img => img.id === selectedImage.id)
-    const previousIndex = currentIdx > 0 ? currentIdx - 1 : images.length - 1
-    setSelectedImage(images[previousIndex])
-  }, [selectedImage, images])
+    // Use gridImages for mobile, carouselImages for desktop
+    const currentImages = window.innerWidth < 1024 ? gridImages : carouselImages
+    const currentIdx = currentImages.findIndex(img => img.id === selectedImage.id)
+    const previousIndex = currentIdx > 0 ? currentIdx - 1 : currentImages.length - 1
+    setSelectedImage(currentImages[previousIndex])
+  }, [selectedImage, gridImages, carouselImages])
 
   const handleLightboxNext = useCallback(() => {
     if (!selectedImage) return
-    const currentIdx = images.findIndex(img => img.id === selectedImage.id)
-    const nextIndex = currentIdx < images.length - 1 ? currentIdx + 1 : 0
-    setSelectedImage(images[nextIndex])
-  }, [selectedImage, images])
+    // Use gridImages for mobile, carouselImages for desktop
+    const currentImages = window.innerWidth < 1024 ? gridImages : carouselImages
+    const currentIdx = currentImages.findIndex(img => img.id === selectedImage.id)
+    const nextIndex = currentIdx < currentImages.length - 1 ? currentIdx + 1 : 0
+    setSelectedImage(currentImages[nextIndex])
+  }, [selectedImage, gridImages, carouselImages])
 
   const loadMore = useCallback(() => {
-    setDisplayedCount(prev => Math.min(prev + 4, images.length))
-  }, [images.length])
+    setDisplayedCount(prev => Math.min(prev + 4, gridImages.length))
+  }, [gridImages.length])
 
   // Gesture handlers
   const handleDragStart = useCallback(() => {
@@ -175,34 +234,48 @@ const Gallery: React.FC = () => {
               <motion.div
                 key={image.id}
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: tappedImage === image.id ? 0.95 : 1 
+                }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="cursor-pointer group relative overflow-hidden rounded-lg aspect-square"
+                className="cursor-pointer group relative overflow-hidden rounded-lg aspect-square touch-manipulation select-none"
+                onClick={() => handleMobileImageClick(image)}
+                onTouchStart={() => setTappedImage(image.id)}
+                onTouchEnd={(e) => {
+                  e.preventDefault()
+                  setTimeout(() => setTappedImage(null), 100)
+                  handleMobileImageClick(image)
+                }}
+                onTouchCancel={() => setTappedImage(null)}
+                style={{ touchAction: 'manipulation' }}
               >
                 <LazyImage
                   src={image.src}
                   srcSet={image.webpSrcSet}
                   sizes="(max-width: 768px) 50vw, 25vw"
                   alt={image.alt}
-                  className="w-full h-full transition-transform duration-300 group-hover:scale-110"
-                  onClick={() => handleImageClick(image)}
+                  className="w-full h-full transition-transform duration-300 group-hover:scale-110 pointer-events-none"
                   width={400}
                   quality={75}
-                  priority={index < 2} // Preload first 2 images
+                  priority={index < 4} // Preload first 4 images
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                
+                {/* Touch overlay for better mobile interaction */}
+                <div className="absolute inset-0 z-10 bg-transparent" />
               </motion.div>
             ))}
           </div>
           
-          {displayedCount < images.length && (
+          {displayedCount < gridImages.length && (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={loadMore}
               className="w-full btn-cosmic text-sm sm:text-base py-3"
             >
-              <span className="relative z-10">Xem thêm ({images.length - displayedCount} ảnh)</span>
+              <span className="relative z-10">Xem thêm ({gridImages.length - displayedCount} ảnh)</span>
             </motion.button>
           )}
         </div>
@@ -225,9 +298,9 @@ const Gallery: React.FC = () => {
             onTouchEnd={handleTouchEnd}
           >
             <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
-              {images.map((image, index) => {
-                const angle = (360 / images.length) * index
-                const currentAngle = (360 / images.length) * currentIndex
+              {carouselImages.map((image, index) => {
+                const angle = (360 / carouselImages.length) * index
+                const currentAngle = (360 / carouselImages.length) * currentIndex
                 const rotation = angle - currentAngle
                 const isCurrent = index === currentIndex
                 
@@ -249,7 +322,7 @@ const Gallery: React.FC = () => {
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
             <div className="glass-cosmic rounded-full px-5 py-2">
               <span className="text-white font-mono text-sm">
-                {currentIndex + 1} / {images.length}
+                {currentIndex + 1} / {carouselImages.length}
               </span>
             </div>
           </div>
@@ -383,16 +456,6 @@ const Gallery: React.FC = () => {
                 alt={selectedImage.alt}
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl"
-              >
-                <p className="text-white text-lg lg:text-xl font-medium text-center">
-                  {selectedImage.caption}
-                </p>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

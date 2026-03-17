@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import BackgroundMusic from './components/BackgroundMusic'
 import CosmicBackground from './components/CosmicBackground'
+import { preloadCriticalImages, preloadBackgroundImages } from './utils/imageService'
 
 // Lazy load các component nặng
 const Timeline = lazy(() => import('./components/Timeline'))
@@ -21,27 +22,30 @@ const SectionLoader = () => (
   </div>
 )
 
-// Simple preload function
-const preloadImage = (src: string) => {
-  const img = new Image()
-  img.src = src
-}
-
 function App() {
-  // Preload critical images
+  // Intelligent image preloading with cache
   useEffect(() => {
+    // Critical images - load immediately
     const criticalImages = [
       'assets/8.jpg', // Hero mobile
       'assets/A KHOA - C HANG_01.jpg', // Hero desktop
-      'assets/11.jpg', // Thanh Hằng
+      'images/11.jpg', // Thanh Hằng
       'assets/12.jpg', // Đăng Khoa
+    ]
+    
+    // Background images - load when browser is idle
+    const backgroundImages = [
       'assets/_32A7964 - HC.jpg', // Story 1
       'assets/_32A8457 - HC.jpg', // Story 2
       'assets/25.jpg', // Story 3
+      // Gallery images - random selection will be preloaded by Gallery component
     ]
     
-    // Preload in background
-    criticalImages.forEach(preloadImage)
+    // Preload critical images first
+    preloadCriticalImages(criticalImages)
+    
+    // Preload background images when browser is idle
+    preloadBackgroundImages(backgroundImages)
   }, [])
 
   return (
