@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 
 interface LazyImageProps {
@@ -10,6 +10,9 @@ interface LazyImageProps {
   onClick?: () => void
   sizes?: string
   srcSet?: string
+  width?: number
+  quality?: number
+  priority?: boolean
 }
 
 const LazyImage: React.FC<LazyImageProps> = ({
@@ -21,18 +24,18 @@ const LazyImage: React.FC<LazyImageProps> = ({
   onClick,
   sizes,
   srcSet,
+  priority = false,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isInView, setIsInView] = useState(false)
+  const [isInView, setIsInView] = useState(priority)
   const [hasError, setHasError] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
     const currentImg = imgRef.current
-    if (!currentImg) return
+    if (!currentImg || priority) return
 
-    // Intersection Observer để lazy load
     observerRef.current = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -41,7 +44,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
         }
       },
       {
-        rootMargin: '50px', // Load khi còn cách 50px
+        rootMargin: '100px',
         threshold: 0.1,
       }
     )
@@ -51,34 +54,38 @@ const LazyImage: React.FC<LazyImageProps> = ({
     return () => {
       observerRef.current?.disconnect()
     }
-  }, [])
+  }, [priority])
 
-  const handleLoad = () => {
+  const handleImageLoad = useCallback(() => {
     setIsLoaded(true)
     onLoad?.()
-  }
+  }, [onLoad])
 
-  const handleError = () => {
+  const handleImageError = useCallback(() => {
     setHasError(true)
-  }
+  }, [])
 
   return (
     <div className={`relative overflow-hidden ${className}`} ref={imgRef} onClick={onClick}>
       {/* Placeholder */}
       {!isLoaded && (
-        <motion.img
-          src={placeholder}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover filter blur-sm"
+        <motion.div
+          className="absolute inset-0 bg-gray-800"
           initial={{ opacity: 1 }}
           animate={{ opacity: isLoaded ? 0 : 1 }}
           transition={{ duration: 0.3 }}
-        />
+        >
+          <img
+            src={placeholder}
+            alt=""
+            className="w-full h-full object-cover filter blur-sm opacity-50"
+          />
+        </motion.div>
       )}
 
       {/* Loading spinner */}
       {!isLoaded && !hasError && isInView && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10">
           <motion.div
             className="w-8 h-8 border-2 border-cosmic-400 border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
@@ -87,7 +94,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
         </div>
       )}
 
-      {/* Actual image */}
+      {/* Main image */}
       {isInView && (
         <motion.img
           src={src}
@@ -95,19 +102,23 @@ const LazyImage: React.FC<LazyImageProps> = ({
           sizes={sizes}
           alt={alt}
           className="w-full h-full object-cover"
-          onLoad={handleLoad}
-          onError={handleError}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoaded ? 1 : 0 }}
           transition={{ duration: 0.5 }}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
         />
       )}
 
       {/* Error state */}
       {hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white text-sm">
-          Không thể tải hình ảnh
+          <div className="text-center">
+            <div className="text-2xl mb-2">📷</div>
+            <div>Không thể tải ảnh</div>
+          </div>
         </div>
       )}
     </div>

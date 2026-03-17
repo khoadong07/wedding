@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import BackgroundMusic from './components/BackgroundMusic'
@@ -21,7 +21,29 @@ const SectionLoader = () => (
   </div>
 )
 
+// Simple preload function
+const preloadImage = (src: string) => {
+  const img = new Image()
+  img.src = src
+}
+
 function App() {
+  // Preload critical images
+  useEffect(() => {
+    const criticalImages = [
+      'assets/8.jpg', // Hero mobile
+      'assets/A KHOA - C HANG_01.jpg', // Hero desktop
+      'assets/11.jpg', // Thanh Hằng
+      'assets/12.jpg', // Đăng Khoa
+      'assets/_32A7964 - HC.jpg', // Story 1
+      'assets/_32A8457 - HC.jpg', // Story 2
+      'assets/25.jpg', // Story 3
+    ]
+    
+    // Preload in background
+    criticalImages.forEach(preloadImage)
+  }, [])
+
   return (
     <div className="min-h-screen relative overflow-x-hidden">
       <CosmicBackground />

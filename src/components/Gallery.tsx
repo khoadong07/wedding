@@ -186,6 +186,9 @@ const Gallery: React.FC = () => {
                   alt={image.alt}
                   className="w-full h-full transition-transform duration-300 group-hover:scale-110"
                   onClick={() => handleImageClick(image)}
+                  width={400}
+                  quality={75}
+                  priority={index < 2} // Preload first 2 images
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.div>
@@ -445,6 +448,9 @@ const CarouselCard: React.FC<CarouselCardProps> = React.memo(({ image, rotation,
           sizes="220px"
           alt={image.alt}
           className="w-full h-full object-cover"
+          width={220}
+          quality={80}
+          priority={isCurrent} // Preload current image
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
