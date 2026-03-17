@@ -21,11 +21,12 @@ FROM nginx:alpine
 # Copy built files from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy assets, optimized images, and audio with proper permissions
+# Copy assets, optimized images, audio, and images directories with proper permissions
 COPY --from=builder /app/assets /usr/share/nginx/html/assets
 COPY --from=builder /app/optimized /usr/share/nginx/html/optimized
 COPY --from=builder /app/preview-audio /usr/share/nginx/html/preview-audio
 COPY --from=builder /app/public /usr/share/nginx/html/public
+COPY --from=builder /app/images /usr/share/nginx/html/images
 
 # Ensure proper permissions for all static files
 RUN chmod -R 755 /usr/share/nginx/html && \
