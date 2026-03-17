@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
             className="text-sm text-white/50"
           >
             <p className="flex items-center justify-center flex-wrap gap-2">
-              <span>© 2024 Thanh Hằng & Đăng Khoa.</span>
+              <span>© 2026 Thanh Hằng & Đăng Khoa.</span>
               <span className="flex items-center gap-1">
                 Made with
                 <motion.span

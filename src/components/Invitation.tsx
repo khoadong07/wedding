@@ -67,10 +67,7 @@ const Invitation: React.FC = () => {
                 className="relative w-80 h-80 lg:w-96 lg:h-96 mx-auto mb-8"
               >
                 <div className="absolute inset-0 cosmic-border rounded-full overflow-hidden">
-                  <picture>
-                    <source type="image/webp" srcSet="optimized/A%20KHOA%20-%20C%20HANG_01-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_01-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_01-1200.webp 1200w" />
-                    <img src="assets/A%20KHOA%20-%20C%20HANG_01.jpg" alt="Save the Date" className="w-full h-full object-cover" />
-                  </picture>
+                  <img src="assets/5.jpg" alt="Save the Date" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-void-900/60 via-transparent to-cosmic-900/30" />
                 </div>
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -95,15 +92,15 @@ const Invitation: React.FC = () => {
           </motion.div>
 
           {/* Right Side - Invitation Details */}
-          <motion.div
-            ref={titleRef}
-            initial={{ opacity: 0, x: 50 }}
-            animate={titleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             {/* Family Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+            <motion.div
+              ref={titleRef}
+              initial={{ opacity: 0, x: 50 }}
+              animate={titleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center"
+            >
               <div>
                 <h4 className="text-xl font-bold text-cosmic-400 mb-4 uppercase tracking-wider">Nhà Gái</h4>
                 <div className="space-y-2 text-white/80">
@@ -118,46 +115,69 @@ const Invitation: React.FC = () => {
                   <p className="font-medium">Bà: Matta Lê Thị Hoa</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Main Invitation */}
+            {/* Main Invitation - No Animation */}
             <div className="text-center space-y-6">
               <h3 className="text-2xl lg:text-3xl font-display font-bold text-white">TRÂN TRỌNG KÍNH MỜI</h3>
               <p className="text-xl lg:text-2xl font-semibold text-cosmic-300">Bạn cùng gia đình</p>
-              <p className="text-white/70 italic">(Tới dự Lễ Thành Hôn của hai con chúng tôi)</p>
+              <p className="text-white/70 italic">(Tới dự Lễ Vu Quy của hai con chúng tôi)</p>
             </div>
 
             {/* Couple Names */}
-             <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
-
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={titleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8"
+            >
               <h4 className="text-2xl lg:text-2xl font-display font-bold text-white">Maria Thanh Hằng</h4>
-
               <Heart className="w-8 h-8 text-nebula-400 fill-current" />
-
               <h4 className="text-2xl lg:text-2xl font-display font-bold text-white">Phêrô Đăng Khoa</h4>
-
-              </div>
+            </motion.div>
 
             {/* Event Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={titleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            >
               <div className="glass-cosmic rounded-2xl p-6 space-y-4">
                 <p className="text-cosmic-300 text-center">Tổ chức vào lúc</p>
                 <h4 className="text-2xl lg:text-3xl font-bold text-white text-center">11 giờ 30</h4>
               </div>
               <div className="glass-cosmic rounded-2xl p-6 space-y-4">
                 <h4 className="text-xl lg:text-2xl font-bold text-white text-center">Chủ nhật, ngày 29 tháng 03 năm 2026</h4>
-                <p className="text-white/70 italic text-center text-sm">(Tức ngày 11 tháng 02 năm Bính Ngọ)</p>
+                <p className="text-white/70 italic text-center text-sm">(Nhằm ngày 11 tháng 02 năm Bính Ngọ)</p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="glass-cosmic rounded-2xl p-6 space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={titleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="glass-cosmic rounded-2xl p-6 space-y-4"
+            >
               <div className="text-center space-y-2">
                 <p className="text-white/80">Tại:</p>
                 <p className="text-lg font-bold text-white">Tư Gia Nhà Gái, Xã Đồng Sơn, Tỉnh Đồng Tháp</p>
               </div>
-              <p className="text-cosmic-300 italic text-center text-sm">Sự hiện diện của Quý khách là niềm vinh hạnh của gia đình tụi mình!</p>
-            </div>
-          </motion.div>
+              <p className="text-cosmic-300 italic text-center text-sm">Sự hiện diện của Quý khách là niềm vinh hạnh của gia đình chúng tôi!</p>
+              
+              {/* Google Maps Button */}
+              <motion.a
+                href="https://maps.app.goo.gl/LKR3dELQ8X1xqQRT9"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="block w-full btn-cosmic text-center py-3 mt-4"
+              >
+                <span className="relative z-10">Chỉ đường trên Google Maps</span>
+              </motion.a>
+            </motion.div>
+          </div>
         </div>
 
         {/* RSVP Form */}

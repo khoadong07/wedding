@@ -69,7 +69,7 @@ const Countdown: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12 sm:mb-20"
         >
           <motion.div
             animate={{ 
@@ -80,19 +80,19 @@ const Countdown: React.FC = () => {
               rotate: { duration: 20, repeat: Infinity, ease: "linear" },
               scale: { duration: 4, repeat: Infinity }
             }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full glass-cosmic mb-8"
+            className="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 rounded-full glass-cosmic mb-6 sm:mb-8"
           >
-            <Calendar className="w-8 h-8 text-cosmic-400" />
+            <Calendar className="w-6 sm:w-8 h-6 sm:h-8 text-cosmic-400" />
           </motion.div>
           
-          <h2 className="text-4xl lg:text-5xl font-display font-bold mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 sm:mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
             Cho đến ngày
           </h2>
-          <h3 className="text-3xl lg:text-4xl font-display font-bold text-white mb-6">
+          <h3 className="text-xl sm:text-3xl lg:text-4xl font-display font-bold text-white mb-4 sm:mb-6">
             Về chung một nhà
           </h3>
-          <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
-            Cùng tụi mình đếm ngược những khoảnh khắc đến ngày trọng đại nhé!
+          <p className="text-sm sm:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
+            Cùng tụi mình đếm ngược đến khoảnh khắc ngày trọng đại nhé!
           </p>
         </motion.div>
 
@@ -101,7 +101,7 @@ const Countdown: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={titleInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-4xl mx-auto"
         >
           {timeUnits.map((unit, index) => (
             <CountdownUnit
@@ -119,16 +119,16 @@ const Countdown: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16"
+          className="text-center mt-12 sm:mt-16"
         >
-          <div className="glass-cosmic rounded-2xl p-8 max-w-2xl mx-auto">
-            <h4 className="text-2xl lg:text-3xl font-display font-bold text-white mb-4">
+          <div className="glass-cosmic rounded-2xl p-6 sm:p-8 max-w-2xl mx-auto mx-3">
+            <h4 className="text-xl sm:text-3xl lg:text-3xl font-display font-bold text-white mb-3 sm:mb-4">
               29 Tháng 03, 2026
             </h4>
-            <p className="text-cosmic-300 text-lg mb-2">
+            <p className="text-cosmic-300 text-base sm:text-lg mb-2">
               Chủ Nhật, 08:00
             </p>
-            <p className="text-white/70">
+            <p className="text-white/70 text-sm sm:text-base">
               Một ngày đặc biệt trong vũ trụ tình yêu của tụi mình
             </p>
           </div>
@@ -159,7 +159,7 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, icon, index
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group"
     >
-      <div className="glass-cosmic rounded-2xl p-6 lg:p-8 text-center hover:scale-105 transition-transform duration-300">
+      <div className="glass-cosmic rounded-2xl p-4 sm:p-6 lg:p-8 text-center hover:scale-105 transition-transform duration-300">
         {/* Icon */}
         <motion.div
           animate={{ 
@@ -171,7 +171,7 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, icon, index
             repeat: Infinity,
             delay: index * 0.5
           }}
-          className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-cosmic-500 to-nebula-500 text-white mb-4"
+          className="inline-flex items-center justify-center w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-gradient-to-r from-cosmic-500 to-nebula-500 text-white mb-3 sm:mb-4"
         >
           {icon}
         </motion.div>
@@ -182,13 +182,13 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, icon, index
           initial={{ scale: 1.2, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="text-4xl lg:text-5xl font-bold font-mono text-white mb-2"
+          className="text-3xl sm:text-4xl lg:text-5xl font-bold font-mono text-white mb-2"
         >
           {value.toString().padStart(2, '0')}
         </motion.div>
 
         {/* Label */}
-        <div className="text-cosmic-300 font-medium text-lg">
+        <div className="text-cosmic-300 font-medium text-sm sm:text-lg">
           {label}
         </div>
 

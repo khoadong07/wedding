@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { X, ChevronLeft, ChevronRight, Sparkles, RotateCw } from 'lucide-react'
+import LazyImage from './LazyImage'
+
+// Define PanInfo type locally to avoid import issues
+interface PanInfo {
+  offset: { x: number; y: number }
+  delta: { x: number; y: number }
+  velocity: { x: number; y: number }
+  point: { x: number; y: number }
+}
 
 interface GalleryImage {
   id: number
@@ -15,116 +24,119 @@ const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoRotating, setIsAutoRotating] = useState(true)
-  const [rotationAxis, setRotationAxis] = useState<'horizontal' | 'vertical'>('horizontal')
+  const [displayedCount, setDisplayedCount] = useState(4)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragConstraintsRef = useRef<HTMLDivElement>(null)
   const [titleRef, titleInView] = useInView({
     threshold: 0.5,
     triggerOnce: true,
   })
 
-  const images: GalleryImage[] = [
-    {
-      id: 1,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_06.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_06-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_06-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_06-1200.webp 1200w',
-      alt: 'Cosmic Memory 1',
-      caption: 'Khoảnh khắc đầu tiên trong vũ trụ tình yêu',
-    },
-    {
-      id: 2,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_07.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_07-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_07-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_07-1200.webp 1200w',
-      alt: 'Cosmic Memory 2',
-      caption: 'Ánh sáng của hai vì sao',
-    },
-    {
-      id: 3,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_08.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_08-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_08-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_08-1200.webp 1200w',
-      alt: 'Cosmic Memory 3',
-      caption: 'Cùng nhau vượt qua mọi thiên hà',
-    },
-    {
-      id: 4,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_09.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_09-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_09-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_09-1200.webp 1200w',
-      alt: 'Cosmic Memory 4',
-      caption: 'Hành trình không gian vô tận',
-    },
-    {
-      id: 5,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_10.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_10-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_10-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_10-1200.webp 1200w',
-      alt: 'Cosmic Memory 5',
-      caption: 'Trong vòng tay của nhau',
-    },
-    {
-      id: 6,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_11.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_11-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_11-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_11-1200.webp 1200w',
-      alt: 'Cosmic Memory 6',
-      caption: 'Nụ cười rạng rỡ như sao',
-    },
-    {
-      id: 7,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_12.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_12-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_12-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_12-1200.webp 1200w',
-      alt: 'Cosmic Memory 7',
-      caption: 'Tựa vào nhau như hai hành tinh',
-    },
-    {
-      id: 8,
-      src: 'assets/A%20KHOA%20-%20C%20HANG_13.jpg',
-      webpSrcSet: 'optimized/A%20KHOA%20-%20C%20HANG_13-480.webp 480w, optimized/A%20KHOA%20-%20C%20HANG_13-768.webp 768w, optimized/A%20KHOA%20-%20C%20HANG_13-1200.webp 1200w',
-      alt: 'Cosmic Memory 8',
-      caption: 'Hạnh phúc vô biên',
-    },
-  ]
-
-  // Auto rotation
-  useEffect(() => {
-    if (!isAutoRotating) return
+  // Memoize images để tránh re-generate - chọn 9 ảnh random từ các ảnh có sẵn
+  const images: GalleryImage[] = useMemo(() => {
+    // Sử dụng các ảnh số từ 1-40 có sẵn trong assets
+    const availableNumbers = Array.from({ length: 40 }, (_, i) => i + 1) // [1, 2, 3, ..., 40]
+    const shuffled = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random
+    const selectedNumbers = shuffled.slice(0, 9) // Chọn 9 ảnh đầu tiên
     
-    const interval = setInterval(() => {
+    return selectedNumbers.map((num, idx) => ({
+      id: idx + 1,
+      src: `assets/${num}.jpg`,
+      webpSrcSet: `assets/${num}.jpg`, // Fallback về JPG vì không có WebP cho ảnh số
+      alt: `Khoảnh khắc ${num}`,
+      caption: `Khoảnh khắc ${num} trong vũ trụ tình yêu`,
+    }))
+  }, [])
+
+  const displayedImages = useMemo(() => images.slice(0, displayedCount), [images, displayedCount])
+
+  // Auto rotation với useCallback
+  const rotateToNext = useCallback(() => {
+    if (!isDragging) {
       setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, 4000)
+    }
+  }, [images.length, isDragging])
 
+  useEffect(() => {
+    if (!isAutoRotating || isDragging) return
+    
+    const interval = setInterval(rotateToNext, 5000) // Tăng thời gian từ 4s lên 5s
     return () => clearInterval(interval)
-  }, [isAutoRotating, images.length])
+  }, [isAutoRotating, rotateToNext, isDragging])
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setIsAutoRotating(false)
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-  }
+  }, [images.length])
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setIsAutoRotating(false)
     setCurrentIndex((prev) => (prev + 1) % images.length)
-  }
+  }, [images.length])
 
-  const handleImageClick = (image: GalleryImage) => {
-    setSelectedImage(image)
-  }
+  const handleImageClick = useCallback((image: GalleryImage) => {
+    if (!isDragging) {
+      setSelectedImage(image)
+    }
+  }, [isDragging])
 
-  const handleLightboxPrevious = () => {
+  const handleLightboxPrevious = useCallback(() => {
     if (!selectedImage) return
     const currentIdx = images.findIndex(img => img.id === selectedImage.id)
     const previousIndex = currentIdx > 0 ? currentIdx - 1 : images.length - 1
     setSelectedImage(images[previousIndex])
-  }
+  }, [selectedImage, images])
 
-  const handleLightboxNext = () => {
+  const handleLightboxNext = useCallback(() => {
     if (!selectedImage) return
     const currentIdx = images.findIndex(img => img.id === selectedImage.id)
     const nextIndex = currentIdx < images.length - 1 ? currentIdx + 1 : 0
     setSelectedImage(images[nextIndex])
-  }
+  }, [selectedImage, images])
+
+  const loadMore = useCallback(() => {
+    setDisplayedCount(prev => Math.min(prev + 4, images.length))
+  }, [images.length])
+
+  // Gesture handlers
+  const handleDragStart = useCallback(() => {
+    setIsDragging(true)
+    setIsAutoRotating(false)
+  }, [])
+
+  const handleDragEnd = useCallback((_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setIsDragging(false)
+    
+    const threshold = 50 // Minimum distance to trigger swipe
+    const velocity = Math.abs(info.velocity.x)
+    
+    if (Math.abs(info.offset.x) > threshold || velocity > 500) {
+      if (info.offset.x > 0) {
+        // Swipe right - go to previous
+        handlePrevious()
+      } else {
+        // Swipe left - go to next
+        handleNext()
+      }
+    }
+  }, [handlePrevious, handleNext])
+
+  // Touch handlers for mobile
+  const handleTouchStart = useCallback((_e: React.TouchEvent) => {
+    setIsDragging(true)
+    setIsAutoRotating(false)
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    setTimeout(() => setIsDragging(false), 100) // Small delay to prevent click
+  }, [])
 
   return (
     <section id="gallery" className="section-padding relative overflow-hidden">
-      {/* Background Effects */}
+      {/* Background Effects - giảm số lượng */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-0 w-96 h-96 bg-cosmic-500/5 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/3 right-0 w-80 h-80 bg-nebula-500/5 rounded-full blur-3xl animate-float-delay-2" />
+        <div className="absolute top-1/3 left-0 w-64 h-64 bg-cosmic-500/3 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-0 w-64 h-64 bg-nebula-500/3 rounded-full blur-3xl" />
       </div>
 
       <div className="container-cosmic relative z-10">
@@ -134,46 +146,82 @@ const Gallery: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12 sm:mb-20"
         >
           <motion.div
             animate={{ 
               rotate: [0, 360],
-              scale: [1, 1.1, 1]
             }}
             transition={{ 
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 4, repeat: Infinity }
+              rotate: { duration: 30, repeat: Infinity, ease: "linear" },
             }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full glass-cosmic mb-8"
+            className="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 rounded-full glass-cosmic mb-6 sm:mb-8"
           >
-            <Sparkles className="w-8 h-8 text-cosmic-400" />
+            <Sparkles className="w-6 sm:w-8 h-6 sm:h-8 text-cosmic-400" />
           </motion.div>
           
-          <h2 className="text-4xl lg:text-5xl font-display font-bold mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 sm:mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
             Album Vũ Trụ
           </h2>
-          <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
             Những khoảnh khắc đẹp nhất được lưu giữ trong không gian và thời gian
           </p>
         </motion.div>
 
-        {/* 3D Rotating Carousel */}
-        <div className="relative w-full max-w-5xl mx-auto mb-16" style={{ height: '500px' }}>
-          {/* Carousel Container */}
-          <div 
-            className="absolute inset-0 flex items-center justify-center"
+        {/* Mobile Grid View */}
+        <div className="lg:hidden mb-12">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-8">
+            {displayedImages.map((image, index) => (
+              <motion.div
+                key={image.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="cursor-pointer group relative overflow-hidden rounded-lg aspect-square"
+              >
+                <LazyImage
+                  src={image.src}
+                  srcSet={image.webpSrcSet}
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  alt={image.alt}
+                  className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+                  onClick={() => handleImageClick(image)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </div>
+          
+          {displayedCount < images.length && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={loadMore}
+              className="w-full btn-cosmic text-sm sm:text-base py-3"
+            >
+              <span className="relative z-10">Xem thêm ({images.length - displayedCount} ảnh)</span>
+            </motion.button>
+          )}
+        </div>
+
+        {/* Desktop 3D Carousel with Gesture Support */}
+        <div className="relative w-full mx-auto mb-12 sm:mb-16 hidden lg:block" style={{ height: '500px' }}>
+          <motion.div 
+            ref={dragConstraintsRef}
+            className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing"
             style={{ 
               perspective: '1000px',
               perspectiveOrigin: 'center center'
             }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.1}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            <div 
-              className="relative w-full h-full"
-              style={{ 
-                transformStyle: 'preserve-3d',
-              }}
-            >
+            <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
               {images.map((image, index) => {
                 const angle = (360 / images.length) * index
                 const currentAngle = (360 / images.length) * currentIndex
@@ -185,14 +233,14 @@ const Gallery: React.FC = () => {
                     key={image.id}
                     image={image}
                     rotation={rotation}
-                    rotationAxis={rotationAxis}
                     isCurrent={isCurrent}
                     onClick={() => handleImageClick(image)}
+                    isDragging={isDragging}
                   />
                 )
               })}
             </div>
-          </div>
+          </motion.div>
 
           {/* Image Counter */}
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
@@ -202,91 +250,61 @@ const Gallery: React.FC = () => {
               </span>
             </div>
           </div>
+
+          {/* Swipe Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isDragging ? 1 : 0 }}
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
+          >
+            <div className="glass-cosmic rounded-full px-4 py-2">
+              <span className="text-white text-xs">← Vuốt để chuyển ảnh →</span>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Navigation Controls - Moved Below */}
-        <div className="flex flex-col items-center space-y-4 mb-8">
-          {/* Rotation Axis Toggle */}
-          <div className="flex items-center space-x-2 glass-cosmic rounded-full px-4 py-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setRotationAxis('horizontal')}
-              className={`px-4 py-1 rounded-full text-sm font-medium transition-all ${
-                rotationAxis === 'horizontal'
-                  ? 'bg-cosmic-400 text-white'
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              Ngang
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setRotationAxis('vertical')}
-              className={`px-4 py-1 rounded-full text-sm font-medium transition-all ${
-                rotationAxis === 'vertical'
-                  ? 'bg-nebula-400 text-white'
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              Dọc
-            </motion.button>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="flex items-center space-x-4">
+        {/* Navigation Controls - Desktop Only */}
+        <div className="hidden lg:flex flex-col items-center space-y-3 sm:space-y-4 mb-8">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePrevious}
-              className="w-12 h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 sm:w-6 h-5 sm:h-6" />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsAutoRotating(!isAutoRotating)}
-              className={`w-12 h-12 rounded-full glass-cosmic flex items-center justify-center transition-colors ${
+              className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center transition-colors ${
                 isAutoRotating ? 'text-cosmic-400' : 'text-white/50'
               }`}
             >
-              <RotateCw className={`w-5 h-5 ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '3s' }} />
+              <RotateCw className={`w-4 sm:w-5 h-4 sm:h-5 ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNext}
-              className="w-12 h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 sm:w-6 h-5 sm:h-6" />
             </motion.button>
           </div>
+          
+          {/* Gesture Hint */}
+          <motion.p
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="text-white/40 text-xs text-center"
+          >
+            Vuốt trái/phải hoặc sử dụng nút điều khiển
+          </motion.p>
         </div>
-
-        {/* Current Image Caption */}
-        <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mt-12"
-        >
-          <div className="inline-block">
-            <motion.div
-              className="relative px-8 py-4 rounded-full glass-cosmic border border-cosmic-400/50"
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cosmic-500/10 to-nebula-500/10 blur-lg" />
-              <p className="relative text-white/90 text-lg font-display font-semibold bg-gradient-to-r from-cosmic-300 via-nebula-300 to-aurora-300 bg-clip-text text-transparent">
-                {images[currentIndex].caption}
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
       </div>
 
       {/* Lightbox Modal */}
@@ -299,7 +317,6 @@ const Gallery: React.FC = () => {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4"
             onClick={() => setSelectedImage(null)}
           >
-            {/* Close Button */}
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -310,7 +327,6 @@ const Gallery: React.FC = () => {
               <X className="w-6 h-6" />
             </motion.button>
 
-            {/* Previous Button */}
             <motion.button
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -324,7 +340,6 @@ const Gallery: React.FC = () => {
               <ChevronLeft className="w-6 h-6" />
             </motion.button>
 
-            {/* Next Button */}
             <motion.button
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -338,7 +353,6 @@ const Gallery: React.FC = () => {
               <ChevronRight className="w-6 h-6" />
             </motion.button>
 
-            {/* Image */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -346,15 +360,26 @@ const Gallery: React.FC = () => {
               transition={{ type: 'spring', damping: 25 }}
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-5xl w-full"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.1}
+              onDragEnd={(_event, info) => {
+                if (Math.abs(info.offset.x) > 100) {
+                  if (info.offset.x > 0) {
+                    handleLightboxPrevious()
+                  } else {
+                    handleLightboxNext()
+                  }
+                }
+              }}
             >
-              <picture>
-                <source type="image/webp" srcSet={selectedImage.webpSrcSet} />
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  className="w-full h-auto rounded-2xl shadow-2xl"
-                />
-              </picture>
+              <LazyImage
+                src={selectedImage.src}
+                srcSet={selectedImage.webpSrcSet}
+                sizes="100vw"
+                alt={selectedImage.alt}
+                className="w-full h-auto rounded-2xl shadow-2xl"
+              />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -376,21 +401,16 @@ const Gallery: React.FC = () => {
 interface CarouselCardProps {
   image: GalleryImage
   rotation: number
-  rotationAxis: 'horizontal' | 'vertical'
   isCurrent: boolean
   onClick: () => void
+  isDragging: boolean
 }
 
-const CarouselCard: React.FC<CarouselCardProps> = ({ image, rotation, rotationAxis, isCurrent, onClick }) => {
-  const radius = 400 // Distance from center - reduced for smaller layout
+const CarouselCard: React.FC<CarouselCardProps> = React.memo(({ image, rotation, isCurrent, onClick, isDragging }) => {
+  const radius = 350
   
-  // Calculate transform based on rotation axis
   const getTransform = () => {
-    if (rotationAxis === 'horizontal') {
-      return `rotateY(${rotation}deg) translateZ(${radius}px)`
-    } else {
-      return `rotateX(${-rotation}deg) translateZ(${radius}px)`
-    }
+    return `rotateY(${rotation}deg) translateZ(${radius}px)`
   }
   
   return (
@@ -398,89 +418,50 @@ const CarouselCard: React.FC<CarouselCardProps> = ({ image, rotation, rotationAx
       className="absolute left-1/2 top-1/2 cursor-pointer"
       style={{
         transformStyle: 'preserve-3d',
-        width: '260px',
-        height: '360px',
-        marginLeft: '-130px',
-        marginTop: '-180px',
+        width: '220px',
+        height: '300px',
+        marginLeft: '-110px',
+        marginTop: '-150px',
+        pointerEvents: isDragging ? 'none' : 'auto',
       }}
       animate={{
         transform: getTransform(),
-        opacity: isCurrent ? 1 : 0.3,
-        scale: isCurrent ? 1 : 0.75,
+        opacity: isCurrent ? 1 : 0.4,
+        scale: isCurrent ? 1 : 0.8,
       }}
       transition={{
-        duration: 0.8,
+        duration: 0.6,
         ease: 'easeInOut'
       }}
       onClick={onClick}
     >
       <div 
         className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl"
-        style={{
-          backfaceVisibility: 'hidden',
-        }}
+        style={{ backfaceVisibility: 'hidden' }}
       >
-        {/* Card Background Glow */}
-        <div 
-          className="absolute inset-0 bg-gradient-to-br from-cosmic-500/20 to-nebula-500/20 rounded-xl blur-xl"
-          style={{
-            transform: 'translateZ(-10px)',
-          }}
+        <LazyImage
+          src={image.src}
+          srcSet={image.webpSrcSet}
+          sizes="220px"
+          alt={image.alt}
+          className="w-full h-full object-cover"
         />
 
-        {/* Image */}
-        <picture>
-          <source type="image/webp" srcSet={image.webpSrcSet} sizes="260px" />
-          <img
-            src={image.src}
-            alt={image.alt}
-            className="w-full h-full object-cover"
-          />
-        </picture>
-
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-        {/* Border Glow for Current */}
         {isCurrent && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="absolute inset-0 rounded-xl border-2 border-cosmic-400/60"
-            style={{
-              boxShadow: '0 0 25px rgba(99, 102, 241, 0.6)',
-            }}
+            style={{ boxShadow: '0 0 25px rgba(99, 102, 241, 0.6)' }}
           />
-        )}
-
-        {/* Floating Sparkles for Current */}
-        {isCurrent && (
-          <>
-            {Array.from({ length: 3 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full"
-                style={{
-                  left: `${20 + Math.random() * 60}%`,
-                  top: `${20 + Math.random() * 60}%`,
-                }}
-                animate={{
-                  opacity: [0, 1, 0],
-                  scale: [0, 1.5, 0],
-                  y: [0, -30],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.5,
-                }}
-              />
-            ))}
-          </>
         )}
       </div>
     </motion.div>
   )
-}
+})
+
+CarouselCard.displayName = 'CarouselCard'
 
 export default Gallery

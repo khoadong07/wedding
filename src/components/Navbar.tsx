@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Heart, Sparkles, Star } from 'lucide-react'
+import { Menu, Heart, Sparkles, Star, Users, Camera } from 'lucide-react'
 
 interface StarParticle {
   id: number
@@ -9,7 +9,6 @@ interface StarParticle {
 }
 
 const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('#home')
   const [stars, setStars] = useState<StarParticle[]>([])
@@ -17,8 +16,6 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-      
       // Detect active section
       const sections = ['#home', '#invitation', '#couple', '#story', '#gallery', '#menu', '#gift']
       for (const section of sections) {
@@ -212,96 +209,113 @@ const Navbar: React.FC = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Top Navigation */}
+      {/* Mobile Bottom Navigation */}
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className={`md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          isScrolled
-            ? 'glass-cosmic backdrop-blur-xl'
-            : 'bg-transparent'
-        }`}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="md:hidden fixed bottom-4 left-4 right-4 z-40"
       >
-        <div className="container-cosmic">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-3"
-            >
-              <div className="relative">
-                <Heart className="w-8 h-8 text-nebula-400" />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0"
+        <div className="bg-black/60 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl shadow-cosmic-400/20 p-2">
+          <div className="flex items-center justify-around">
+            {navItems.slice(0, 5).map((item, index) => {
+              const isActive = activeSection === item.href
+              const icons = [
+                <Heart className="w-5 h-5" />,
+                <Sparkles className="w-5 h-5" />,
+                <Users className="w-5 h-5" />,
+                <Star className="w-5 h-5" />,
+                <Camera className="w-5 h-5" />
+              ]
+              
+              return (
+                <motion.button
+                  key={item.href}
+                  onClick={(e) => scrollToSection(item.href, e)}
+                  whileTap={{ scale: 0.9 }}
+                  className={`relative flex items-center justify-center p-4 rounded-xl transition-all duration-300 ${
+                    isActive ? 'text-white' : 'text-white/60'
+                  }`}
                 >
-                  <Sparkles className="w-8 h-8 text-cosmic-400" />
-                </motion.div>
-              </div>
-              <span className="text-xl font-display font-bold bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
-                H & K
-              </span>
-            </motion.div>
-
-            {/* Mobile Menu Button */}
+                  {/* Background */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-gradient-to-r from-cosmic-500/40 to-nebula-500/40 rounded-xl"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  
+                  {/* Icon */}
+                  <motion.div
+                    animate={isActive ? { scale: 1.2 } : { scale: 1 }}
+                    className="relative z-10"
+                  >
+                    {icons[index]}
+                  </motion.div>
+                  
+                  {/* Active dot */}
+                  {isActive && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 right-1 w-2 h-2 bg-cosmic-400 rounded-full"
+                    />
+                  )}
+                </motion.button>
+              )
+            })}
+            
+            {/* More menu for remaining items */}
             <motion.button
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+              className="relative flex items-center justify-center p-4 rounded-xl text-white/60"
             >
               <motion.div
                 animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
+                <Menu className="w-5 h-5" />
               </motion.div>
             </motion.button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Expanded Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="glass-cosmic border-t border-white/10"
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className="absolute bottom-full mb-2 left-0 right-0 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl p-4"
             >
-              <div className="container-cosmic py-4">
-                {navItems.map((item, index) => (
+              <div className="grid grid-cols-2 gap-2">
+                {navItems.slice(5).map((item, index) => (
                   <motion.button
                     key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={(e) => scrollToSection(item.href, e)}
-                    className={`
-                      w-full text-left py-3 px-4 rounded-lg transition-colors
-                      ${activeSection === item.href
-                        ? 'bg-white/10 text-white'
-                        : 'text-white/80 hover:text-white hover:bg-white/5'
-                      }
-                    `}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={(e) => {
+                      scrollToSection(item.href, e)
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className={`p-3 rounded-xl text-left transition-all ${
+                      activeSection === item.href
+                        ? 'bg-gradient-to-r from-cosmic-500/40 to-nebula-500/40 text-white'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                    }`}
                   >
-                    {item.label}
+                    <span className="text-sm font-medium">{item.label}</span>
                   </motion.button>
                 ))}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Cosmic glow effect */}
-        {isScrolled && (
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cosmic-400/50 to-transparent" />
-        )}
       </motion.nav>
     </>
   )

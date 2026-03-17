@@ -1,42 +1,42 @@
 # Build stage
 FROM node:18-alpine AS builder
 
+# Set memory limit for Node.js
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 WORKDIR /app
 
-# Copy package files
+# Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci --silent
 
-# Copy source code
+# Copy source files
 COPY . .
 
-# Build the application
+# Build the application with memory optimization
 RUN npm run build
 
 # Production stage
 FROM nginx:alpine
 
-# Copy built files from builder stage
+# Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy assets, optimized images, audio, and images directories with proper permissions
+# Copy static assets that exist
 COPY --from=builder /app/assets /usr/share/nginx/html/assets
 COPY --from=builder /app/optimized /usr/share/nginx/html/optimized
 COPY --from=builder /app/preview-audio /usr/share/nginx/html/preview-audio
 COPY --from=builder /app/public /usr/share/nginx/html/public
 COPY --from=builder /app/images /usr/share/nginx/html/images
 
-# Ensure proper permissions for all static files
-RUN chmod -R 755 /usr/share/nginx/html && \
-    find /usr/share/nginx/html -type f -exec chmod 644 {} \;
+# Set proper permissions
+RUN chmod -R 755 /usr/share/nginx/html
 
-# Copy nginx configuration
+# Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

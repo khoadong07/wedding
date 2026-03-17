@@ -251,9 +251,108 @@ const QRPayment: React.FC = () => {
                 <div className="inline-block p-4 bg-white rounded-2xl">
                   <img
                     src="/images/94330cbc3424ba7ae335.jpg"
-                    alt="QR Code"
+                    alt="QR Code Payment"
                     className="w-48 h-48 object-contain"
+                    onError={(e) => {
+                      // Fallback to SVG if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      target.nextElementSibling?.classList.remove('hidden');
+                    }}
                   />
+                  {/* SVG Fallback */}
+                  <svg width="192" height="192" viewBox="0 0 192 192" className="w-48 h-48 hidden">
+                    <rect width="192" height="192" fill="white"/>
+                    
+                    {/* Corner squares */}
+                    <rect x="8" y="8" width="56" height="56" fill="black"/>
+                    <rect x="16" y="16" width="40" height="40" fill="white"/>
+                    <rect x="24" y="24" width="24" height="24" fill="black"/>
+                    
+                    <rect x="128" y="8" width="56" height="56" fill="black"/>
+                    <rect x="136" y="16" width="40" height="40" fill="white"/>
+                    <rect x="144" y="24" width="24" height="24" fill="black"/>
+                    
+                    <rect x="8" y="128" width="56" height="56" fill="black"/>
+                    <rect x="16" y="136" width="40" height="40" fill="white"/>
+                    <rect x="24" y="144" width="24" height="24" fill="black"/>
+                    
+                    {/* Data pattern */}
+                    <rect x="72" y="8" width="8" height="8" fill="black"/>
+                    <rect x="88" y="8" width="8" height="8" fill="black"/>
+                    <rect x="104" y="8" width="8" height="8" fill="black"/>
+                    <rect x="72" y="24" width="8" height="8" fill="black"/>
+                    <rect x="104" y="24" width="8" height="8" fill="black"/>
+                    <rect x="72" y="40" width="8" height="8" fill="black"/>
+                    <rect x="88" y="40" width="8" height="8" fill="black"/>
+                    <rect x="104" y="40" width="8" height="8" fill="black"/>
+                    <rect x="72" y="56" width="8" height="8" fill="black"/>
+                    <rect x="104" y="56" width="8" height="8" fill="black"/>
+                    
+                    <rect x="8" y="72" width="8" height="8" fill="black"/>
+                    <rect x="24" y="72" width="8" height="8" fill="black"/>
+                    <rect x="40" y="72" width="8" height="8" fill="black"/>
+                    <rect x="56" y="72" width="8" height="8" fill="black"/>
+                    <rect x="72" y="72" width="8" height="8" fill="black"/>
+                    <rect x="88" y="72" width="8" height="8" fill="black"/>
+                    <rect x="104" y="72" width="8" height="8" fill="black"/>
+                    <rect x="120" y="72" width="8" height="8" fill="black"/>
+                    <rect x="136" y="72" width="8" height="8" fill="black"/>
+                    <rect x="152" y="72" width="8" height="8" fill="black"/>
+                    <rect x="168" y="72" width="8" height="8" fill="black"/>
+                    <rect x="184" y="72" width="8" height="8" fill="black"/>
+                    
+                    {/* More data pattern */}
+                    <rect x="8" y="88" width="8" height="8" fill="black"/>
+                    <rect x="40" y="88" width="8" height="8" fill="black"/>
+                    <rect x="72" y="88" width="8" height="8" fill="black"/>
+                    <rect x="104" y="88" width="8" height="8" fill="black"/>
+                    <rect x="136" y="88" width="8" height="8" fill="black"/>
+                    <rect x="168" y="88" width="8" height="8" fill="black"/>
+                    
+                    <rect x="24" y="104" width="8" height="8" fill="black"/>
+                    <rect x="56" y="104" width="8" height="8" fill="black"/>
+                    <rect x="88" y="104" width="8" height="8" fill="black"/>
+                    <rect x="120" y="104" width="8" height="8" fill="black"/>
+                    <rect x="152" y="104" width="8" height="8" fill="black"/>
+                    <rect x="184" y="104" width="8" height="8" fill="black"/>
+                    
+                    <rect x="8" y="120" width="8" height="8" fill="black"/>
+                    <rect x="40" y="120" width="8" height="8" fill="black"/>
+                    <rect x="72" y="120" width="8" height="8" fill="black"/>
+                    <rect x="104" y="120" width="8" height="8" fill="black"/>
+                    <rect x="136" y="120" width="8" height="8" fill="black"/>
+                    <rect x="168" y="120" width="8" height="8" fill="black"/>
+                    
+                    {/* Bottom pattern */}
+                    <rect x="72" y="136" width="8" height="8" fill="black"/>
+                    <rect x="88" y="136" width="8" height="8" fill="black"/>
+                    <rect x="104" y="136" width="8" height="8" fill="black"/>
+                    <rect x="120" y="136" width="8" height="8" fill="black"/>
+                    <rect x="136" y="136" width="8" height="8" fill="black"/>
+                    <rect x="152" y="136" width="8" height="8" fill="black"/>
+                    <rect x="168" y="136" width="8" height="8" fill="black"/>
+                    <rect x="184" y="136" width="8" height="8" fill="black"/>
+                    
+                    <rect x="72" y="152" width="8" height="8" fill="black"/>
+                    <rect x="104" y="152" width="8" height="8" fill="black"/>
+                    <rect x="136" y="152" width="8" height="8" fill="black"/>
+                    <rect x="168" y="152" width="8" height="8" fill="black"/>
+                    
+                    <rect x="72" y="168" width="8" height="8" fill="black"/>
+                    <rect x="88" y="168" width="8" height="8" fill="black"/>
+                    <rect x="104" y="168" width="8" height="8" fill="black"/>
+                    <rect x="120" y="168" width="8" height="8" fill="black"/>
+                    <rect x="136" y="168" width="8" height="8" fill="black"/>
+                    <rect x="152" y="168" width="8" height="8" fill="black"/>
+                    <rect x="168" y="168" width="8" height="8" fill="black"/>
+                    <rect x="184" y="168" width="8" height="8" fill="black"/>
+                    
+                    <rect x="72" y="184" width="8" height="8" fill="black"/>
+                    <rect x="104" y="184" width="8" height="8" fill="black"/>
+                    <rect x="136" y="184" width="8" height="8" fill="black"/>
+                    <rect x="168" y="184" width="8" height="8" fill="black"/>
+                  </svg>
                 </div>
                 <p className="text-white/60 text-sm mt-4">
                   Quét mã QR để chuyển khoản nhanh chóng
