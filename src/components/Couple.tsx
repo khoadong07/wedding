@@ -44,7 +44,7 @@ const Couple: React.FC = () => {
             Cô dâu & Chú rể
           </h2>
           <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
-            Hai linh hồn đã tìm thấy nhau trong vũ trụ bao la
+            Hai tâm hồn đã tìm thấy nhau trong vũ trụ bao la
           </p>
         </motion.div>
 

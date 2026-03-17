@@ -191,7 +191,7 @@ const Story: React.FC = () => {
           </h2>
           <p className="text-xl lg:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
             Một câu chuyện tình yêu được viết bằng ánh sáng của những vì sao, 
-            kể về hành trình của hai linh hồn tìm thấy nhau trong vô tận vũ trụ.
+            kể về hành trình của hai tâm hồn tìm thấy nhau trong vô tận vũ trụ.
           </p>
         </motion.div>
 
