@@ -92,7 +92,7 @@ const Countdown: React.FC = () => {
             Về chung một nhà
           </h3>
           <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
-            Cùng chúng mình đếm ngược những khoảnh khắc đến ngày trọng đại nhé!
+            Cùng tụi mình đếm ngược những khoảnh khắc đến ngày trọng đại nhé!
           </p>
         </motion.div>
 
