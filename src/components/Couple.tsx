@@ -55,6 +55,7 @@ const Couple: React.FC = () => {
             <CoupleCard
               name="Thanh Hằng"
               role="Cô dâu"
+              description=""
               imageSrc="images/11.jpg"
               webpSrcSet="images/11.jpg"
               index={0}
@@ -113,6 +114,7 @@ const Couple: React.FC = () => {
             <CoupleCard
               name="Đăng Khoa"
               role="Chú rể"
+              description=""
               imageSrc="assets/12.jpg"
               webpSrcSet="assets/12.jpg"
               index={1}
@@ -136,7 +138,6 @@ interface CoupleCardProps {
 const CoupleCard: React.FC<CoupleCardProps> = ({ 
   name, 
   role, 
-  description, 
   imageSrc, 
   webpSrcSet, 
   index 
