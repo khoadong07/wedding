@@ -55,7 +55,6 @@ const Couple: React.FC = () => {
             <CoupleCard
               name="Thanh Hằng"
               role="Cô dâu"
-              description="Một người phụ nữ dịu dàng như ánh trăng, mang trong mình sự ấm áp và yêu thương vô bờ bến."
               imageSrc="images/11.jpg"
               webpSrcSet="images/11.jpg"
               index={0}
@@ -114,7 +113,6 @@ const Couple: React.FC = () => {
             <CoupleCard
               name="Đăng Khoa"
               role="Chú rể"
-              description="Một người đàn ông mạnh mẽ như những vì sao, luôn che chở và bảo vệ tình yêu của mình."
               imageSrc="assets/12.jpg"
               webpSrcSet="assets/12.jpg"
               index={1}
