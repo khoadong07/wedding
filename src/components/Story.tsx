@@ -108,13 +108,15 @@ const StoryCard: React.FC<StoryCardProps> = ({
           </div>
         </div>
         
-        <div className="relative pl-0 lg:pl-4">
-          <p className="text-sm sm:text-base lg:text-xl text-white/80 leading-relaxed">
-            {content}
-          </p>
-          {/* Cosmic glow effect - Hidden on mobile */}
-          <div className="hidden lg:block absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-cosmic-400 via-nebula-400 to-aurora-400 rounded-full opacity-50" />
-        </div>
+        {content && (
+          <div className="relative pl-0 lg:pl-4">
+            <p className="text-sm sm:text-base lg:text-xl text-white/80 leading-relaxed">
+              {content}
+            </p>
+            {/* Cosmic glow effect - Hidden on mobile */}
+            <div className="hidden lg:block absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-cosmic-400 via-nebula-400 to-aurora-400 rounded-full opacity-50" />
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -130,7 +132,7 @@ const Story: React.FC = () => {
     {
       number: '01',
       title: 'Cosmic Encounter',
-      content: 'Trong vô tận của vũ trụ, hai ngôi sao đã tìm thấy nhau. Không phải bằng sự tình cờ, mà bằng lực hấp dẫn của tình yêu - một năng lượng mạnh mẽ hơn cả lực hấp dẫn của các thiên thể.',
+      content: '',
       imageSrc: 'assets/_32A7964%20-%20HC.jpg',
       imageAlt: 'Cosmic Encounter',
       webpSrcSet: 'optimized/_32A7964%20-%20HC-480.webp 480w, optimized/_32A7964%20-%20HC-768.webp 768w, optimized/_32A7964%20-%20HC-1200.webp 1200w',
@@ -140,7 +142,7 @@ const Story: React.FC = () => {
     {
       number: '02',
       title: 'Stellar Journey',
-      content: 'Cùng nhau khám phá những thiên hà xa xôi của cảm xúc, vượt qua những tinh vân của thử thách. Mỗi khoảnh khắc bên nhau như những chùm sao băng, để lại dấu ấn sáng rực trong bầu trời tâm hồn.',
+      content: '',
       imageSrc: 'assets/_32A8457%20-%20HC.jpg',
       imageAlt: 'Stellar Journey',
       webpSrcSet: 'optimized/_32A8457%20-%20HC-480.webp 480w, optimized/_32A8457%20-%20HC-768.webp 768w, optimized/_32A8457%20-%20HC-1200.webp 1200w',
@@ -151,7 +153,7 @@ const Story: React.FC = () => {
     {
       number: '03',
       title: 'Eternal Bond',
-      content: 'Và rồi, trong sự bao la của không gian và thời gian, tụi mình quyết định tạo nên một hệ sao đôi - hai trái tim quay quanh nhau trong một quỹ đạo tình yêu vĩnh cửu, chiếu sáng cho nhau đến tận cùng vũ trụ.',
+      content: '',
       imageSrc: 'assets/25.jpg',
       imageAlt: 'Eternal Bond',
       webpSrcSet: 'assets/25.jpg',
