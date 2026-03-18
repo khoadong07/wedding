@@ -36,8 +36,10 @@ const Gallery: React.FC = () => {
 
   // Memoize images để tránh re-generate
   const { carouselImages, gridImages } = useMemo(() => {
-    // 9 ảnh cố định cho 3D carousel (desktop)
-    const carouselNumbers = [1, 5, 8, 12, 15, 18, 22, 25, 28] // 9 ảnh đẹp nhất
+    // 9 ảnh random cho 3D carousel (desktop) - random mỗi lần load
+    const availableNumbers = Array.from({ length: 40 }, (_, i) => i + 1) // [1, 2, 3, ..., 40]
+    const shuffledForCarousel = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random
+    const carouselNumbers = shuffledForCarousel.slice(0, 9) // Chọn 9 ảnh random
     const carousel = carouselNumbers.map((num, idx) => ({
       id: idx + 1,
       src: `assets/${num}.jpg`,
@@ -47,9 +49,8 @@ const Gallery: React.FC = () => {
     }))
 
     // 20 ảnh random cho grid view (mobile)
-    const availableNumbers = Array.from({ length: 40 }, (_, i) => i + 1) // [1, 2, 3, ..., 40]
-    const shuffled = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random
-    const selectedNumbers = shuffled.slice(0, 20) // Chọn 20 ảnh đầu tiên
+    const shuffledForGrid = availableNumbers.sort(() => Math.random() - 0.5) // Shuffle random lại
+    const selectedNumbers = shuffledForGrid.slice(0, 20) // Chọn 20 ảnh đầu tiên
     const grid = selectedNumbers.map((num, idx) => ({
       id: idx + 1,
       src: `assets/${num}.jpg`,
