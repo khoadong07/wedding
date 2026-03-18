@@ -138,6 +138,7 @@ interface CoupleCardProps {
 const CoupleCard: React.FC<CoupleCardProps> = ({ 
   name, 
   role, 
+  description, 
   imageSrc, 
   webpSrcSet, 
   index 
