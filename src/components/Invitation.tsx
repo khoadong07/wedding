@@ -23,11 +23,20 @@ const Invitation: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
+    console.log('Input changed:', name, value)
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Form data:', formData)
+    console.log('SHEET_URL:', SHEET_URL)
+    
+    if (!SHEET_URL) {
+      alert('Lỗi: Chưa cấu hình URL Google Sheet. Vui lòng kiểm tra file .env')
+      return
+    }
+    
     setSubmitting(true)
     try {
       await fetch(SHEET_URL, {
