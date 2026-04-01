@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Sparkles, Zap, Heart, Star } from 'lucide-react'
 
 interface StoryCardProps {
   number: string
@@ -12,8 +11,72 @@ interface StoryCardProps {
   webpSrcSet: string
   reverse?: boolean
   delay?: number
-  icon: React.ElementType
-  gradient: string
+}
+
+const Story: React.FC = () => {
+  const [titleRef, titleInView] = useInView({
+    threshold: 0.5,
+    triggerOnce: true,
+  })
+
+  const stories = [
+    {
+      number: 'Phase 01',
+      title: 'Lần đầu gặp gỡ',
+      content: 'Bắt đầu từ những ánh nhìn lạ lẫm, chúng mình đã tìm thấy sự đồng điệu kỳ lạ trong tâm hồn. Những mẩu chuyện không tên đã dệt nên một khởi đầu đầy hy vọng.',
+      imageSrc: 'assets/_32A7964%20-%20HC.jpg',
+      imageAlt: 'Khởi đầu tình yêu',
+      webpSrcSet: 'optimized/_32A7964%20-%20HC-480.webp 480w, optimized/_32A7964%20-%20HC-768.webp 768w, optimized/_32A7964%20-%20HC-1200.webp 1200w',
+    },
+    {
+      number: 'Phase 02',
+      title: 'Hành trình vun đắp',
+      content: 'Cùng nhau bước qua những ngày nắng gắt và cả những chiều mưa giông, chúng mình hiểu rằng tình yêu không chỉ là cảm xúc, mà là sự thấu hiểu và đồng hành.',
+      imageSrc: 'assets/_32A8457%20-%20HC.jpg',
+      imageAlt: 'Hành trình tình yêu',
+      webpSrcSet: 'optimized/_32A8457%20-%20HC-480.webp 480w, optimized/_32A8457%20-%20HC-768.webp 768w, optimized/_32A8457%20-%20HC-1200.webp 1200w',
+      reverse: true,
+    },
+    {
+      number: 'Phase 03',
+      title: 'Lời hứa trăm năm',
+      content: 'Và giờ đây, chúng mình sẵn sàng nắm tay nhau bước vào một chương hoàn toàn mới. Một lời hứa trân trọng, chăm sóc và yêu thương nhau đến trọn đời.',
+      imageSrc: 'assets/25.jpg',
+      imageAlt: 'Lời hứa trăm năm',
+      webpSrcSet: 'assets/25.jpg',
+    },
+  ]
+
+  return (
+    <section id="story" className="section-padding bg-white relative">
+      <div className="container-minimal">
+        {/* Section Header */}
+        <motion.div
+          ref={titleRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-24"
+        >
+          <h2 className="text-4xl sm:text-6xl font-display font-bold mb-6 text-void-900">
+            Câu Chuyện Tình Yêu
+          </h2>
+          <p className="text-void-400 font-serif italic text-lg uppercase tracking-widest">Our Love Story</p>
+        </motion.div>
+
+        {/* Story Cards */}
+        <div className="space-y-32 max-w-6xl mx-auto">
+          {stories.map((story, index) => (
+            <StoryCard
+              key={story.number}
+              {...story}
+              delay={index * 0.2}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -25,8 +88,6 @@ const StoryCard: React.FC<StoryCardProps> = ({
   webpSrcSet,
   reverse = false,
   delay = 0,
-  icon: Icon,
-  gradient,
 }) => {
   const [ref, inView] = useInView({
     threshold: 0.3,
@@ -36,191 +97,45 @@ const StoryCard: React.FC<StoryCardProps> = ({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 100 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
-      transition={{ duration: 0.8, delay }}
+      initial={{ opacity: 0, y: 60 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+      transition={{ duration: 1, delay, ease: [0.16, 1, 0.3, 1] }}
       className={`flex flex-col ${
         reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'
-      } items-center gap-6 sm:gap-8 lg:gap-16`}
+      } items-center gap-12 lg:gap-24 group`}
     >
-      {/* Image - Mobile First */}
-      <motion.div
-        whileHover={{ scale: 1.02, rotateY: 5 }}
-        transition={{ duration: 0.5 }}
-        className="w-full lg:flex-1 max-w-md lg:max-w-lg order-first lg:order-none"
-      >
-        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl cosmic-border">
+      {/* Image Area */}
+      <div className="w-full lg:flex-1 relative">
+        <div className="absolute -inset-4 bg-beige-50 rounded-[40px] -z-10 transition-transform duration-700 group-hover:scale-95" />
+        <div className="relative overflow-hidden rounded-[32px] shadow-2xl aspect-[4/3]">
           <picture>
             <source type="image/webp" srcSet={webpSrcSet} sizes="(max-width: 768px) 100vw, 50vw" />
             <img
               src={imageSrc}
               alt={imageAlt}
-              className="w-full h-56 sm:h-72 lg:h-96 object-cover transition-transform duration-700 hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               loading="lazy"
             />
           </picture>
-          {/* Cosmic overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-void-900/60 via-transparent to-cosmic-900/20" />
-          
-          {/* Floating particles */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full"
-                style={{
-                  left: `${20 + Math.random() * 60}%`,
-                  top: `${20 + Math.random() * 60}%`,
-                }}
-                animate={{
-                  y: [0, -20, 0],
-                  opacity: [0.3, 1, 0.3],
-                  scale: [1, 1.5, 1],
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Content */}
-      <div className="w-full lg:flex-1 space-y-4 sm:space-y-6 lg:space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 lg:gap-6">
-          <motion.div 
-            whileHover={{ scale: 1.1, rotate: 360 }}
-            transition={{ duration: 0.5 }}
-            className={`flex-shrink-0 w-12 sm:w-14 lg:w-16 h-12 sm:h-14 lg:h-16 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-base lg:text-xl cosmic-border ${gradient}`}
-          >
-            <Icon className="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8" />
-          </motion.div>
-          <div className="flex-1">
-            <div className="text-xs sm:text-sm font-mono text-cosmic-400 mb-1">
-              Chapter {number}
-            </div>
-            <h3 className="text-xl sm:text-2xl lg:text-4xl font-display font-bold bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent leading-tight">
-              {title}
-            </h3>
-          </div>
+      {/* Content Area */}
+      <div className="w-full lg:flex-1 space-y-6">
+        <div className="text-sm font-bold tracking-[0.4em] uppercase text-cosmic-400">
+          {number}
         </div>
-        
-        {content && (
-          <div className="relative pl-0 lg:pl-4">
-            <p className="text-sm sm:text-base lg:text-xl text-white/80 leading-relaxed">
-              {content}
-            </p>
-            {/* Cosmic glow effect - Hidden on mobile */}
-            <div className="hidden lg:block absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-cosmic-400 via-nebula-400 to-aurora-400 rounded-full opacity-50" />
-          </div>
-        )}
+        <h3 className="text-3xl sm:text-5xl font-display font-bold text-void-900 leading-tight">
+          {title}
+        </h3>
+        <p className="text-lg sm:text-xl leading-relaxed text-void-500 font-serif italic">
+          "{content}"
+        </p>
+        <div className="pt-4">
+           <div className="w-12 h-0.5 bg-cosmic-100" />
+        </div>
       </div>
     </motion.div>
-  )
-}
-
-const Story: React.FC = () => {
-  const [titleRef, titleInView] = useInView({
-    threshold: 0.5,
-    triggerOnce: true,
-  })
-
-  const stories = [
-    {
-      number: '01',
-      title: 'Cosmic Encounter',
-      content: '',
-      imageSrc: 'assets/_32A7964%20-%20HC.jpg',
-      imageAlt: 'Cosmic Encounter',
-      webpSrcSet: 'optimized/_32A7964%20-%20HC-480.webp 480w, optimized/_32A7964%20-%20HC-768.webp 768w, optimized/_32A7964%20-%20HC-1200.webp 1200w',
-      icon: Sparkles,
-      gradient: 'bg-gradient-to-br from-cosmic-500 to-cosmic-700',
-    },
-    {
-      number: '02',
-      title: 'Stellar Journey',
-      content: '',
-      imageSrc: 'assets/_32A8457%20-%20HC.jpg',
-      imageAlt: 'Stellar Journey',
-      webpSrcSet: 'optimized/_32A8457%20-%20HC-480.webp 480w, optimized/_32A8457%20-%20HC-768.webp 768w, optimized/_32A8457%20-%20HC-1200.webp 1200w',
-      reverse: true,
-      icon: Zap,
-      gradient: 'bg-gradient-to-br from-nebula-500 to-nebula-700',
-    },
-    {
-      number: '03',
-      title: 'Eternal Bond',
-      content: '',
-      imageSrc: 'assets/25.jpg',
-      imageAlt: 'Eternal Bond',
-      webpSrcSet: 'assets/25.jpg',
-      icon: Heart,
-      gradient: 'bg-gradient-to-br from-aurora-500 to-aurora-700',
-    },
-  ]
-
-  return (
-    <section id="story" className="section-padding relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-0 w-96 h-96 bg-cosmic-500/10 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-nebula-500/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute top-3/4 left-1/3 w-48 h-48 bg-aurora-500/10 rounded-full blur-2xl animate-float-delay-1" />
-      </div>
-
-      <div className="container-cosmic relative z-10">
-        {/* Section Header */}
-        <motion.div
-          ref={titleRef}
-          initial={{ opacity: 0, y: 50 }}
-          animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16 sm:mb-20 lg:mb-32"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 rounded-full glass-cosmic mb-6 sm:mb-8"
-          >
-            <Star className="w-6 sm:w-8 h-6 sm:h-8 text-cosmic-400" />
-          </motion.div>
-          
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold mb-6 sm:mb-8 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
-            Cosmic Love Story
-          </h2>
-          <p className="text-sm sm:text-xl lg:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed px-2">
-            Một câu chuyện tình yêu được viết bằng ánh sáng của những vì sao, 
-            kể về hành trình của hai tâm hồn tìm thấy nhau trong vô tận vũ trụ.
-          </p>
-        </motion.div>
-
-        {/* Story Cards */}
-        <div className="space-y-20 sm:space-y-24 lg:space-y-40">
-          {stories.map((story, index) => (
-            <StoryCard
-              key={story.number}
-              {...story}
-              delay={index * 0.3}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Cosmic Grid Overlay */}
-      <div 
-        className="absolute inset-0 opacity-5 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99, 102, 241, 0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99, 102, 241, 0.5) 1px, transparent 1px)
-          `,
-          backgroundSize: '100px 100px'
-        }}
-      />
-    </section>
   )
 }
 

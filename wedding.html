@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link href="./wendola2/bootstrap.min.css" rel="stylesheet">
     <link href="./wendola2/style.css" rel="stylesheet">
     <link href="./wendola2/magnific-popup.css" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Thanh Hằng & Đăng Khoa - Wedding Invitation</title>
+    <title>Đăng Khoa  &  Thanh Hằng - Wedding Invitation v2.0</title>
     <style>
         .services-section-two .image-box img, .contact-section-two figure img {
             width: auto !important;
@@ -148,7 +151,7 @@
                         <div style="max-width: 500px; max-height: 500px;">
                             <img src="assets/A KHOA - C HANG_03.jpg" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
                         </div>
-                        <h3 class="mt-5 h3">Thanh Hằng & Đăng Khoa</h3>
+                        <h3 class="mt-5 h3">Đăng Khoa  &  Thanh Hằng</h3>
                     </div>
                     <div class="col-lg-6 col-sm-12 card-description">
                         <div class="row text-center">
@@ -436,6 +439,12 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group col-lg-12">
+                                            <div class="input-outer">
+                                                <input type="tel" class="vs-attendance-phone" name="phone" placeholder="Số điện thoại" required="" pattern="[0-9]{10,11}">
+                                            </div>
+                                        </div>
+
                                         <h6 class="title">Bạn là khách của?</h6>
                                         <div class="form-group col-4 col-lg-4 col-md-4 col-sm-4">
                                             <div class="radio-box">
@@ -463,6 +472,17 @@
                                                     <option>03</option>
                                                     <option>04</option>
                                                     <option>05</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-12 vs-pickup-location">
+                                            <h6 class="title">Chọn điểm đón (18/04/2026)</h6>
+                                            <div class="input-outer">
+                                                <select name="pickup_location" class="form-control">
+                                                    <option disabled="" selected="">Chọn điểm đón</option>
+                                                    <option value="thu_duc">7h - Ngã tư Thủ Đức</option>
+                                                    <option value="viettel">8h - Toà nhà Viettel - 285 CMT8 - P. Hoà Hưng - TP. HCM</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -775,6 +795,18 @@
         // Update countdown every second
         setInterval(updateCountdown, 1000);
         updateCountdown(); // Initial call
+
+        // Show/hide pickup location based on attendance decision
+        document.querySelectorAll('input[name="decision"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const pickupLocation = document.querySelector('.vs-pickup-location');
+                if (this.value === 'yes') {
+                    pickupLocation.style.display = 'block';
+                } else {
+                    pickupLocation.style.display = 'none';
+                }
+            });
+        });
     </script>
 
     <style>

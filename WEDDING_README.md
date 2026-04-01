@@ -1,6 +1,6 @@
 # Wedding Invitation Website - Template Style
 
-Đây là website thiệp cưới được tạo theo đúng format của template gốc, chỉ thay đổi thông tin và hình ảnh của Thanh Hằng & Đăng Khoa.
+Đây là website thiệp cưới được tạo theo đúng format của template gốc, chỉ thay đổi thông tin và hình ảnh của Đăng Khoa  &  Thanh Hằng.
 
 ## Cấu trúc file
 
@@ -35,7 +35,7 @@
 
 1. Mở file `wedding.html` trong trình duyệt web
 2. Website sẽ hiển thị đầy đủ các section theo template gốc
-3. Tất cả hình ảnh đã được thay thế bằng ảnh của Thanh Hằng & Đăng Khoa
+3. Tất cả hình ảnh đã được thay thế bằng ảnh của Đăng Khoa  &  Thanh Hằng
 
 ## Tùy chỉnh
 
@@ -80,4 +80,4 @@
 - Mobile browsers
 - Internet Explorer 11+ (hạn chế một số tính năng)
 
-Chúc cặp đôi Thanh Hằng & Đăng Khoa có một đám cưới thật hạnh phúc! 💕
+Chúc cặp đôi Đăng Khoa  &  Thanh Hằng có một đám cưới thật hạnh phúc! 💕

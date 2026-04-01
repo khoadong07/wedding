@@ -2,82 +2,83 @@ import React, { useMemo } from 'react'
 import { motion } from 'framer-motion'
 
 const CosmicBackground: React.FC = () => {
-  // Giảm số particles từ 50 xuống 15 và memoize
+  // Giảm số particles và làm chúng giống như những cánh hoa hoặc vảy vàng nhỏ
   const particles = useMemo(() => 
-    Array.from({ length: 15 }).map((_, i) => ({
+    Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: 2 + Math.random() * 3,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20,
+      size: 1 + Math.random() * 3,
     })), []
   )
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-void-900 via-cosmic-900 to-void-900" />
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      {/* Soft elegant background */}
+      <div className="absolute inset-0 bg-[#faf9f6]" />
       
-      {/* Floating orbs - giảm animation phức tạp */}
+      {/* Subtle floating orbs - Cream/Gold shades */}
       <motion.div
         animate={{
-          x: [0, 50, 0],
-          y: [0, -50, 0],
+          x: [0, 30, 0],
+          y: [0, -30, 0],
+          scale: [1, 1.1, 1],
         }}
         transition={{
-          duration: 30,
+          duration: 20,
           repeat: Infinity,
-          ease: "linear"
+          ease: "easeInOut"
         }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-cosmic-500/10 rounded-full blur-3xl"
+        className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-cosmic-100/30 rounded-full blur-[100px]"
       />
       
       <motion.div
         animate={{
-          x: [0, -75, 0],
-          y: [0, 50, 0],
+          x: [0, -40, 0],
+          y: [0, 40, 0],
+          scale: [1, 1.2, 1],
         }}
         transition={{
-          duration: 35,
+          duration: 25,
           repeat: Infinity,
-          ease: "linear"
+          ease: "easeInOut"
         }}
-        className="absolute top-3/4 right-1/4 w-96 h-96 bg-nebula-500/8 rounded-full blur-3xl"
+        className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-nebula-100/20 rounded-full blur-[120px]"
       />
 
-      {/* Particle system - tối ưu hóa */}
+      {/* Floating golden dust/particles */}
       <div className="absolute inset-0">
         {particles.map((particle) => (
           <motion.div
             key={particle.id}
-            className="absolute w-1 h-1 bg-white rounded-full"
+            className="absolute bg-cosmic-300/40 rounded-full"
             style={{
               left: `${particle.left}%`,
               top: `${particle.top}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
             }}
             animate={{
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.2, 1],
+              y: [0, -100, 0],
+              x: [0, 20, 0],
+              opacity: [0, 0.6, 0],
+              scale: [0.5, 1.5, 0.5],
             }}
             transition={{
               duration: particle.duration,
               repeat: Infinity,
               delay: particle.delay,
+              ease: "easeInOut"
             }}
           />
         ))}
       </div>
 
-      {/* Cosmic grid - giảm opacity */}
-      <div 
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99, 102, 241, 0.2) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99, 102, 241, 0.2) 1px, transparent 1px)
-          `,
-          backgroundSize: '100px 100px'
-        }}
+      {/* Subtle texture/noise */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
       />
     </div>
   )

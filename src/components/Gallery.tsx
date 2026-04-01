@@ -182,21 +182,12 @@ const Gallery: React.FC = () => {
   }, [handlePrevious, handleNext])
 
   // Touch handlers for mobile
-  const handleTouchStart = useCallback((_e: React.TouchEvent) => {
-    setIsDragging(true)
-    setIsAutoRotating(false)
-  }, [])
-
-  const handleTouchEnd = useCallback(() => {
-    setTimeout(() => setIsDragging(false), 100) // Small delay to prevent click
-  }, [])
-
   return (
-    <section id="gallery" className="section-padding relative overflow-hidden">
-      {/* Background Effects - giảm số lượng */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-0 w-64 h-64 bg-cosmic-500/3 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-0 w-64 h-64 bg-nebula-500/3 rounded-full blur-3xl" />
+    <section id="gallery" className="section-padding relative overflow-hidden bg-white">
+      {/* Background Effects - Subtle */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-cosmic-50/50 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-nebula-50/40 rounded-full blur-[100px]" />
       </div>
 
       <div className="container-cosmic relative z-10">
@@ -206,111 +197,87 @@ const Gallery: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12 sm:mb-20"
+          className="text-center mb-16 sm:mb-24"
         >
           <motion.div
-            animate={{ 
-              rotate: [0, 360],
-            }}
-            transition={{ 
-              rotate: { duration: 30, repeat: Infinity, ease: "linear" },
-            }}
-            className="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 rounded-full glass-cosmic mb-6 sm:mb-8"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            className="inline-flex items-center justify-center w-14 sm:w-20 h-14 sm:h-20 rounded-full bg-cosmic-50 border border-cosmic-100 mb-8"
           >
-            <Sparkles className="w-6 sm:w-8 h-6 sm:h-8 text-cosmic-400" />
+            <Sparkles className="w-8 sm:w-10 h-8 sm:h-10 text-cosmic-400" />
           </motion.div>
           
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 sm:mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
-            Album Vũ Trụ
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold mb-6 text-gradient-gold">
+            Khoảnh Khắc Hạnh Phúc
           </h2>
-          <p className="text-sm sm:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            Những khoảnh khắc đẹp nhất được lưu giữ trong không gian và thời gian
+          <p className="text-base sm:text-xl text-void-500 max-w-3xl mx-auto px-4 font-serif italic">
+            "Nơi lưu giữ những kỷ niệm đẹp nhất trong hành trình yêu thương của chúng mình"
           </p>
         </motion.div>
 
         {/* Mobile Grid View */}
-        <div className="lg:hidden mb-12">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-8">
+        <div className="lg:hidden mb-16">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-10">
             {displayedImages.map((image, index) => (
               <motion.div
                 key={image.id}
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ 
                   opacity: 1, 
-                  scale: tappedImage === image.id ? 0.95 : 1 
+                  scale: tappedImage === image.id ? 0.98 : 1 
                 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="cursor-pointer group relative overflow-hidden rounded-lg aspect-square touch-manipulation select-none"
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="cursor-pointer group relative overflow-hidden rounded-2xl aspect-[3/4] shadow-md border border-cosmic-100"
                 onClick={() => handleMobileImageClick(image)}
-                onTouchStart={() => setTappedImage(image.id)}
-                onTouchEnd={(e) => {
-                  e.preventDefault()
-                  setTimeout(() => setTappedImage(null), 100)
-                  handleMobileImageClick(image)
-                }}
-                onTouchCancel={() => setTappedImage(null)}
-                style={{ touchAction: 'manipulation' }}
               >
                 <LazyImage
                   src={image.src}
                   srcSet={image.webpSrcSet}
                   sizes="(max-width: 768px) 50vw, 25vw"
                   alt={image.alt}
-                  className="w-full h-full transition-transform duration-300 group-hover:scale-110 pointer-events-none"
+                  className="w-full h-full transition-transform duration-700 group-hover:scale-110 pointer-events-none"
                   width={400}
                   quality={75}
-                  priority={index < 4} // Preload first 4 images
+                  priority={index < 4}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                
-                {/* Touch overlay for better mobile interaction */}
-                <div className="absolute inset-0 z-10 bg-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.div>
             ))}
           </div>
           
           {displayedCount < gridImages.length && (
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={loadMore}
-              className="w-full btn-cosmic text-sm sm:text-base py-3"
+              className="w-full btn-outline text-base py-4 rounded-2xl"
             >
-              <span className="relative z-10">Xem thêm ({gridImages.length - displayedCount} ảnh)</span>
+              <span>Xem thêm ({gridImages.length - displayedCount} ảnh)</span>
             </motion.button>
           )}
         </div>
 
-        {/* Desktop 3D Carousel with Gesture Support */}
-        <div className="relative w-full mx-auto mb-12 sm:mb-16 hidden lg:block" style={{ height: '500px' }}>
+        {/* Desktop 3D Carousel */}
+        <div className="relative w-full mx-auto mb-20 hidden lg:block" style={{ height: '600px' }}>
           <motion.div 
             ref={dragConstraintsRef}
             className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing"
-            style={{ 
-              perspective: '1000px',
-              perspectiveOrigin: 'center center'
-            }}
+            style={{ perspective: '1200px' }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.1}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
           >
             <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
               {carouselImages.map((image, index) => {
                 const angle = (360 / carouselImages.length) * index
                 const currentAngle = (360 / carouselImages.length) * currentIndex
-                const rotation = angle - currentAngle
-                const isCurrent = index === currentIndex
-                
                 return (
                   <CarouselCard
                     key={image.id}
                     image={image}
-                    rotation={rotation}
-                    isCurrent={isCurrent}
+                    rotation={angle - currentAngle}
+                    isCurrent={index === currentIndex}
                     onClick={() => handleImageClick(image)}
                     isDragging={isDragging}
                   />
@@ -320,67 +287,48 @@ const Gallery: React.FC = () => {
           </motion.div>
 
           {/* Image Counter */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="glass-cosmic rounded-full px-5 py-2">
-              <span className="text-white font-mono text-sm">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
+            <div className="bg-white/80 backdrop-blur-md border border-cosmic-100 rounded-full px-8 py-2.5 shadow-sm">
+              <span className="text-void-900 font-bold tracking-widest text-sm">
                 {currentIndex + 1} / {carouselImages.length}
               </span>
             </div>
           </div>
-
-          {/* Swipe Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isDragging ? 1 : 0 }}
-            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
-          >
-            <div className="glass-cosmic rounded-full px-4 py-2">
-              <span className="text-white text-xs">← Vuốt để chuyển ảnh →</span>
-            </div>
-          </motion.div>
         </div>
 
-        {/* Navigation Controls - Desktop Only */}
-        <div className="hidden lg:flex flex-col items-center space-y-3 sm:space-y-4 mb-8">
-          <div className="flex items-center space-x-2 sm:space-x-4">
+        {/* Navigation Controls */}
+        <div className="hidden lg:flex flex-col items-center space-y-6 mb-12">
+          <div className="flex items-center space-x-6">
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePrevious}
-              className="w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="w-14 h-14 rounded-full bg-white border border-cosmic-100 flex items-center justify-center text-void-900 hover:bg-cosmic-50 shadow-sm transition-all"
             >
-              <ChevronLeft className="w-5 sm:w-6 h-5 sm:h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsAutoRotating(!isAutoRotating)}
-              className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center transition-colors ${
-                isAutoRotating ? 'text-cosmic-400' : 'text-white/50'
+              className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all ${
+                isAutoRotating ? 'bg-cosmic-50 border-cosmic-200 text-cosmic-600' : 'bg-white border-void-100 text-void-300'
               }`}
             >
-              <RotateCw className={`w-4 sm:w-5 h-4 sm:h-5 ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
+              <RotateCw className={`w-6 h-6 ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '6s' }} />
             </motion.button>
 
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNext}
-              className="w-10 sm:w-12 h-10 sm:h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="w-14 h-14 rounded-full bg-white border border-cosmic-100 flex items-center justify-center text-void-900 hover:bg-cosmic-50 shadow-sm transition-all"
             >
-              <ChevronRight className="w-5 sm:w-6 h-5 sm:h-6" />
+              <ChevronRight className="w-8 h-8" />
             </motion.button>
           </div>
-          
-          {/* Gesture Hint */}
-          <motion.p
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="text-white/40 text-xs text-center"
-          >
-            Vuốt trái/phải hoặc sử dụng nút điều khiển
-          </motion.p>
+          <p className="text-void-400 text-xs uppercase tracking-[0.2em] font-bold">Vuốt hoặc dùng nút để lướt xem</p>
         </div>
       </div>
 
@@ -391,71 +339,43 @@ const Gallery: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-white/95 backdrop-blur-2xl p-4 sm:p-10"
             onClick={() => setSelectedImage(null)}
           >
             <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 w-12 h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+              className="absolute top-6 right-6 w-14 h-14 rounded-full bg-void-900 text-white flex items-center justify-center hover:bg-void-800 transition-all z-10 shadow-xl"
             >
-              <X className="w-6 h-6" />
+              <X className="w-8 h-8" />
             </motion.button>
 
             <motion.button
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              onClick={(e) => {
-                e.stopPropagation()
-                handleLightboxPrevious()
-              }}
-              className="absolute left-4 w-12 h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); handleLightboxPrevious(); }}
+              className="absolute left-6 w-14 h-14 rounded-full bg-white/80 border border-void-100 flex items-center justify-center text-void-900 hover:bg-white transition-all z-10 shadow-lg"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </motion.button>
 
             <motion.button
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              onClick={(e) => {
-                e.stopPropagation()
-                handleLightboxNext()
-              }}
-              className="absolute right-4 w-12 h-12 rounded-full glass-cosmic flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); handleLightboxNext(); }}
+              className="absolute right-6 w-14 h-14 rounded-full bg-white/80 border border-void-100 flex items-center justify-center text-void-900 hover:bg-white transition-all z-10 shadow-lg"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-8 h-8" />
             </motion.button>
 
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25 }}
+              exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-5xl w-full"
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.1}
-              onDragEnd={(_event, info) => {
-                if (Math.abs(info.offset.x) > 100) {
-                  if (info.offset.x > 0) {
-                    handleLightboxPrevious()
-                  } else {
-                    handleLightboxNext()
-                  }
-                }
-              }}
+              className="relative max-w-6xl w-full"
             >
               <LazyImage
                 src={selectedImage.src}
                 srcSet={selectedImage.webpSrcSet}
                 sizes="100vw"
                 alt={selectedImage.alt}
-                className="w-full h-auto rounded-2xl shadow-2xl"
+                className="w-full h-auto rounded-3xl shadow-3xl border border-cosmic-100"
               />
             </motion.div>
           </motion.div>
@@ -474,58 +394,47 @@ interface CarouselCardProps {
 }
 
 const CarouselCard: React.FC<CarouselCardProps> = React.memo(({ image, rotation, isCurrent, onClick, isDragging }) => {
-  const radius = 350
-  
-  const getTransform = () => {
-    return `rotateY(${rotation}deg) translateZ(${radius}px)`
-  }
+  const radius = 400
   
   return (
     <motion.div
       className="absolute left-1/2 top-1/2 cursor-pointer"
       style={{
         transformStyle: 'preserve-3d',
-        width: '220px',
-        height: '300px',
-        marginLeft: '-110px',
-        marginTop: '-150px',
+        width: '280px',
+        height: '380px',
+        marginLeft: '-140px',
+        marginTop: '-190px',
         pointerEvents: isDragging ? 'none' : 'auto',
       }}
       animate={{
-        transform: getTransform(),
-        opacity: isCurrent ? 1 : 0.4,
-        scale: isCurrent ? 1 : 0.8,
+        transform: `rotateY(${rotation}deg) translateZ(${radius}px)`,
+        opacity: isCurrent ? 1 : 0.3,
+        scale: isCurrent ? 1 : 0.75,
       }}
-      transition={{
-        duration: 0.6,
-        ease: 'easeInOut'
-      }}
+      transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
       onClick={onClick}
     >
       <div 
-        className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl"
+        className={`relative w-full h-full rounded-2xl overflow-hidden transition-all duration-500 ${isCurrent ? 'ring-[12px] ring-white shadow-2xl scale-105' : 'ring-1 ring-cosmic-100 shadow-lg'}`}
         style={{ backfaceVisibility: 'hidden' }}
       >
         <LazyImage
           src={image.src}
           srcSet={image.webpSrcSet}
-          sizes="220px"
+          sizes="280px"
           alt={image.alt}
           className="w-full h-full object-cover"
-          width={220}
-          quality={80}
-          priority={isCurrent} // Preload current image
+          width={280}
+          quality={85}
+          priority={isCurrent}
         />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        
         {isCurrent && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 rounded-xl border-2 border-cosmic-400/60"
-            style={{ boxShadow: '0 0 25px rgba(99, 102, 241, 0.6)' }}
-          />
+          <div className="absolute inset-x-0 bottom-0 p-6 text-center">
+             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="h-0.5 w-12 bg-cosmic-300 mx-auto" />
+          </div>
         )}
       </div>
     </motion.div>

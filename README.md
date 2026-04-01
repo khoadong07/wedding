@@ -1,4 +1,4 @@
-# Wedding Invitation - Thanh Hằng & Đăng Khoa
+# Wedding Invitation - Đăng Khoa  &  Thanh Hằng
 
 A modern, responsive wedding invitation website built with React, TypeScript, and Tailwind CSS.
 
@@ -131,7 +131,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 💝 Credits
 
-Created with love for Thanh Hằng & Đăng Khoa's special day.
+Created with love for Đăng Khoa  &  Thanh Hằng's special day.
 
 ---
 

@@ -21,11 +21,11 @@ const QRPayment: React.FC = () => {
   }
 
   return (
-    <section id="gift" className="section-padding relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-cosmic-500/5 rounded-full blur-3xl animate-float-delay-2" />
-        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-nebula-500/5 rounded-full blur-3xl animate-float" />
+    <section id="gift" className="section-padding relative overflow-hidden bg-white">
+      {/* Background Decor - Subtle */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-80 h-80 bg-cosmic-50/40 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-nebula-50/40 rounded-full blur-[100px]" />
       </div>
 
       <div className="container-cosmic relative z-10">
@@ -35,59 +35,47 @@ const QRPayment: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
           <motion.div
-            animate={{ 
-              rotate: [0, 360],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{ 
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 4, repeat: Infinity }
-            }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full glass-cosmic mb-8"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            className="inline-flex items-center justify-center w-14 sm:w-20 h-14 sm:h-20 rounded-full bg-cosmic-50 border border-cosmic-100 mb-8"
           >
-            <Gift className="w-8 h-8 text-cosmic-400" />
+            <Gift className="w-8 sm:w-10 h-8 sm:h-10 text-cosmic-400" />
           </motion.div>
           
-          <h2 className="text-4xl lg:text-5xl font-display font-bold mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
-            Mừng cưới sớm?
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold mb-6 text-gradient-gold">
+            Gửi Mừng Hạnh Phúc
           </h2>
-          <h3 className="text-3xl lg:text-4xl font-display font-bold text-white mb-6">
-            Đến cô dâu & chú rể
-          </h3>
-          <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
-            Gửi mừng cưới sớm cho dâu và rể bằng mã QR dưới đây bạn yêu nhé
+          <p className="text-lg sm:text-2xl text-void-500 max-w-3xl mx-auto px-4 font-serif italic mb-8">
+            "Sự hiện diện và lời chúc của bạn là món quà tuyệt vời nhất dành cho chúng mình"
           </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-cosmic-200 to-transparent mx-auto" />
         </motion.div>
 
         {/* Red Envelope Button */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={titleInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={titleInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+          transition={{ duration: 1, delay: 0.3 }}
           className="text-center"
         >
           <motion.button
             onClick={openQR}
-            whileHover={{ scale: 1.05, y: -5 }}
+            whileHover={{ scale: 1.05, y: -10 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-block"
+            className="group relative inline-block cursor-pointer p-8 rounded-[40px] bg-white shadow-sm hover:shadow-2xl border border-cosmic-50 transition-all duration-500"
           >
             {/* Red Envelope SVG */}
             <div className="relative">
               <motion.div
                 animate={{ 
-                  rotate: [0, 2, -2, 0],
-                  scale: [1, 1.02, 1]
+                  rotate: [0, 1, -1, 0],
+                  y: [0, -5, 0]
                 }}
-                transition={{ 
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="w-48 h-64 lg:w-56 lg:h-72"
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="w-48 h-64 lg:w-64 lg:h-80"
               >
                 <svg viewBox="0 0 180 240" className="w-full h-full drop-shadow-2xl">
                   {/* Main envelope body */}
@@ -186,185 +174,101 @@ const QRPayment: React.FC = () => {
             onClick={closeQR}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              className="relative max-w-md w-full glass-cosmic rounded-3xl p-8"
+              className="relative max-w-sm w-full bg-white rounded-3xl p-6 shadow-3xl overflow-hidden border border-cosmic-50"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Decorative Background */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-cosmic-50/50 rounded-full blur-3xl -mr-12 -mt-12" />
+              
               {/* Close Button */}
               <motion.button
-                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileHover={{ scale: 1.1, rotate: 180 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={closeQR}
-                className="absolute -top-4 -right-4 w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors shadow-lg"
+                className="absolute top-4 right-4 w-8 h-8 bg-void-50 hover:bg-void-100 text-void-500 rounded-full flex items-center justify-center transition-all z-10"
               >
-                <X className="w-6 h-6" />
+                <X className="w-4 h-4" />
               </motion.button>
 
               {/* Header */}
-              <div className="text-center mb-8">
+              <div className="text-center mb-6 relative">
                 <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-cosmic-500 to-nebula-500 text-white mb-4"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-cosmic-50 border border-cosmic-100 text-cosmic-400 mb-4"
                 >
-                  <QrCode className="w-8 h-8" />
+                  <QrCode className="w-7 h-7" />
                 </motion.div>
-                <h3 className="text-2xl font-display font-bold text-white mb-2">
-                  Thông tin chuyển khoản
+                <h3 className="text-2xl font-display font-bold text-void-900 mb-2">
+                  Quà Mừng Cưới
                 </h3>
-                <p className="text-white/70">
-                  Cảm ơn bạn đã gửi lời chúc mừng đến tụi mình
+                <p className="text-void-500 font-serif italic text-sm">
+                  "Cảm ơn bạn đã gửi những lời chúc tốt đẹp nhất"
                 </p>
               </div>
 
               {/* Bank Info */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl">
-                  <CreditCard className="w-5 h-5 text-cosmic-400" />
+              <div className="space-y-3 mb-6 relative">
+                <div className="flex items-center space-x-3 p-4 bg-beige-50/50 rounded-xl border border-cosmic-100/50 group hover:border-cosmic-200 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-cosmic-400 group-hover:scale-110 transition-transform">
+                    <CreditCard className="w-4 h-4" />
+                  </div>
                   <div>
-                    <p className="text-white/60 text-sm">Số tài khoản</p>
-                    <p className="text-white font-mono font-bold">1903 6961 0660 13</p>
+                    <p className="text-void-400 text-[10px] font-bold uppercase tracking-widest">Số tài khoản</p>
+                    <p className="text-void-900 font-bold text-sm tracking-wider">0899992421</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl">
-                  <Heart className="w-5 h-5 text-nebula-400" />
+                <div className="flex items-center space-x-3 p-4 bg-beige-50/50 rounded-xl border border-cosmic-100/50 group hover:border-cosmic-200 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-nebula-400 group-hover:scale-110 transition-transform">
+                    <Heart className="w-4 h-4" />
+                  </div>
                   <div>
-                    <p className="text-white/60 text-sm">Chủ tài khoản</p>
-                    <p className="text-white font-bold">LY THI THANH HANG</p>
+                    <p className="text-void-400 text-[10px] font-bold uppercase tracking-widest">Chủ tài khoản</p>
+                    <p className="text-void-900 font-bold text-sm">ĐỒNG ĐĂNG KHOA</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-aurora-400" />
+                <div className="flex items-center space-x-3 p-4 bg-beige-50/50 rounded-xl border border-cosmic-100/50 group hover:border-cosmic-200 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-aurora-400 group-hover:scale-110 transition-transform">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
                   <div>
-                    <p className="text-white/60 text-sm">Ngân hàng</p>
-                    <p className="text-white font-bold">Techcombank</p>
+                    <p className="text-void-400 text-[10px] font-bold uppercase tracking-widest">Ngân hàng</p>
+                    <p className="text-void-900 font-bold text-sm">MB BANK</p>
                   </div>
                 </div>
               </div>
 
               {/* QR Code */}
-              <div className="text-center">
-                <div className="inline-block p-4 bg-white rounded-2xl">
+              <div className="text-center relative">
+                <div className="inline-block p-4 bg-white rounded-2xl shadow-lg ring-1 ring-cosmic-100 group">
                   <img
-                    src="/images/94330cbc3424ba7ae335.jpg"
+                    src="images/e3e680cbbf8a3ed4679b.jpg"
                     alt="QR Code Payment"
-                    className="w-48 h-48 object-contain"
+                    className="w-44 h-44 object-contain group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      // Fallback to SVG if image fails to load
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
                       target.nextElementSibling?.classList.remove('hidden');
                     }}
                   />
-                  {/* SVG Fallback */}
-                  <svg width="192" height="192" viewBox="0 0 192 192" className="w-48 h-48 hidden">
-                    <rect width="192" height="192" fill="white"/>
-                    
-                    {/* Corner squares */}
-                    <rect x="8" y="8" width="56" height="56" fill="black"/>
-                    <rect x="16" y="16" width="40" height="40" fill="white"/>
-                    <rect x="24" y="24" width="24" height="24" fill="black"/>
-                    
-                    <rect x="128" y="8" width="56" height="56" fill="black"/>
-                    <rect x="136" y="16" width="40" height="40" fill="white"/>
-                    <rect x="144" y="24" width="24" height="24" fill="black"/>
-                    
-                    <rect x="8" y="128" width="56" height="56" fill="black"/>
-                    <rect x="16" y="136" width="40" height="40" fill="white"/>
-                    <rect x="24" y="144" width="24" height="24" fill="black"/>
-                    
-                    {/* Data pattern */}
-                    <rect x="72" y="8" width="8" height="8" fill="black"/>
-                    <rect x="88" y="8" width="8" height="8" fill="black"/>
-                    <rect x="104" y="8" width="8" height="8" fill="black"/>
-                    <rect x="72" y="24" width="8" height="8" fill="black"/>
-                    <rect x="104" y="24" width="8" height="8" fill="black"/>
-                    <rect x="72" y="40" width="8" height="8" fill="black"/>
-                    <rect x="88" y="40" width="8" height="8" fill="black"/>
-                    <rect x="104" y="40" width="8" height="8" fill="black"/>
-                    <rect x="72" y="56" width="8" height="8" fill="black"/>
-                    <rect x="104" y="56" width="8" height="8" fill="black"/>
-                    
-                    <rect x="8" y="72" width="8" height="8" fill="black"/>
-                    <rect x="24" y="72" width="8" height="8" fill="black"/>
-                    <rect x="40" y="72" width="8" height="8" fill="black"/>
-                    <rect x="56" y="72" width="8" height="8" fill="black"/>
-                    <rect x="72" y="72" width="8" height="8" fill="black"/>
-                    <rect x="88" y="72" width="8" height="8" fill="black"/>
-                    <rect x="104" y="72" width="8" height="8" fill="black"/>
-                    <rect x="120" y="72" width="8" height="8" fill="black"/>
-                    <rect x="136" y="72" width="8" height="8" fill="black"/>
-                    <rect x="152" y="72" width="8" height="8" fill="black"/>
-                    <rect x="168" y="72" width="8" height="8" fill="black"/>
-                    <rect x="184" y="72" width="8" height="8" fill="black"/>
-                    
-                    {/* More data pattern */}
-                    <rect x="8" y="88" width="8" height="8" fill="black"/>
-                    <rect x="40" y="88" width="8" height="8" fill="black"/>
-                    <rect x="72" y="88" width="8" height="8" fill="black"/>
-                    <rect x="104" y="88" width="8" height="8" fill="black"/>
-                    <rect x="136" y="88" width="8" height="8" fill="black"/>
-                    <rect x="168" y="88" width="8" height="8" fill="black"/>
-                    
-                    <rect x="24" y="104" width="8" height="8" fill="black"/>
-                    <rect x="56" y="104" width="8" height="8" fill="black"/>
-                    <rect x="88" y="104" width="8" height="8" fill="black"/>
-                    <rect x="120" y="104" width="8" height="8" fill="black"/>
-                    <rect x="152" y="104" width="8" height="8" fill="black"/>
-                    <rect x="184" y="104" width="8" height="8" fill="black"/>
-                    
-                    <rect x="8" y="120" width="8" height="8" fill="black"/>
-                    <rect x="40" y="120" width="8" height="8" fill="black"/>
-                    <rect x="72" y="120" width="8" height="8" fill="black"/>
-                    <rect x="104" y="120" width="8" height="8" fill="black"/>
-                    <rect x="136" y="120" width="8" height="8" fill="black"/>
-                    <rect x="168" y="120" width="8" height="8" fill="black"/>
-                    
-                    {/* Bottom pattern */}
-                    <rect x="72" y="136" width="8" height="8" fill="black"/>
-                    <rect x="88" y="136" width="8" height="8" fill="black"/>
-                    <rect x="104" y="136" width="8" height="8" fill="black"/>
-                    <rect x="120" y="136" width="8" height="8" fill="black"/>
-                    <rect x="136" y="136" width="8" height="8" fill="black"/>
-                    <rect x="152" y="136" width="8" height="8" fill="black"/>
-                    <rect x="168" y="136" width="8" height="8" fill="black"/>
-                    <rect x="184" y="136" width="8" height="8" fill="black"/>
-                    
-                    <rect x="72" y="152" width="8" height="8" fill="black"/>
-                    <rect x="104" y="152" width="8" height="8" fill="black"/>
-                    <rect x="136" y="152" width="8" height="8" fill="black"/>
-                    <rect x="168" y="152" width="8" height="8" fill="black"/>
-                    
-                    <rect x="72" y="168" width="8" height="8" fill="black"/>
-                    <rect x="88" y="168" width="8" height="8" fill="black"/>
-                    <rect x="104" y="168" width="8" height="8" fill="black"/>
-                    <rect x="120" y="168" width="8" height="8" fill="black"/>
-                    <rect x="136" y="168" width="8" height="8" fill="black"/>
-                    <rect x="152" y="168" width="8" height="8" fill="black"/>
-                    <rect x="168" y="168" width="8" height="8" fill="black"/>
-                    <rect x="184" y="168" width="8" height="8" fill="black"/>
-                    
-                    <rect x="72" y="184" width="8" height="8" fill="black"/>
-                    <rect x="104" y="184" width="8" height="8" fill="black"/>
-                    <rect x="136" y="184" width="8" height="8" fill="black"/>
-                    <rect x="168" y="184" width="8" height="8" fill="black"/>
-                  </svg>
+                  <div className="hidden w-44 h-44 flex items-center justify-center text-void-300 text-xs">QR Code Image Not Found</div>
                 </div>
-                <p className="text-white/60 text-sm mt-4">
-                  Quét mã QR để chuyển khoản nhanh chóng
+                <p className="text-void-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-4">
+                  Quét bằng ứng dụng ngân hàng
                 </p>
               </div>
 
-              {/* Close Button */}
+              {/* Close Button Bottom */}
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={closeQR}
-                className="w-full mt-8 py-3 bg-gradient-to-r from-cosmic-500 to-nebula-500 text-white font-medium rounded-xl hover:shadow-lg transition-shadow"
+                className="w-full mt-6 py-3 btn-primary rounded-xl text-sm"
               >
                 Đóng
               </motion.button>

@@ -29,7 +29,7 @@ function App() {
     const criticalImages = [
       'assets/8.jpg', // Hero mobile
       'assets/A KHOA - C HANG_01.jpg', // Hero desktop
-      'images/11.jpg', // Thanh Hằng
+      'assets/5.jpg', // Thanh Hằng
       'assets/12.jpg', // Đăng Khoa
     ]
     

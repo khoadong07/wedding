@@ -1,9 +1,17 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Clock, Users, Heart, Sparkles } from 'lucide-react'
+import { Users, Heart, Sparkles } from 'lucide-react'
+
+// Custom Cross Icon
+const CrossIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2v20M8 6h8M7 12h10M8 18h8" />
+  </svg>
+)
 
 interface TimelineEvent {
+  date: string
   time: string
   title: string
   description: string
@@ -18,66 +26,54 @@ const Timeline: React.FC = () => {
 
   const events: TimelineEvent[] = [
     {
-      time: '08:00',
-      title: 'Lễ gia tiên',
-      description: 'Nghi lễ gia tiên trang trọng, hai họ cùng nhau chứng kiến khoảnh khắc thiêng liêng khi đôi uyên ương thành kính dâng hương, cầu nguyện tổ tiên phù hộ cho hạnh phúc trăm năm.',
-      icon: <Heart className="w-6 h-6" />
+      date: '17/04/2026',
+      time: '17:30',
+      title: 'Thánh Lễ hôn phối',
+      description: 'Cử hành tại Giáo xứ Chính Toà Phan Thiết',
+      icon: <CrossIcon className="w-8 h-8" />
     },
     {
+      date: '18/04/2026',
+      time: '09:00',
+      title: 'Lễ gia tiên',
+      description: 'Nghi lễ gia tiên trang trọng tại nhà trai',
+      icon: <Heart className="w-8 h-8" />
+    },
+    {
+      date: '18/04/2026',
       time: '11:00',
       title: 'Đón khách',
-      description: 'Cô dâu và chú rể hân hoan chào đón từng vị khách quý đến chung vui. Đây là lúc những nụ cười, những cái ôm ấm áp và những lời chúc phúc chân thành được trao gửi.',
-      icon: <Users className="w-6 h-6" />
+      description: 'Chú rể và cô dâuhân hoan chào đón từng vị khách quý đến chung vui.',
+      icon: <Users className="w-8 h-8" />
     },
     {
+      date: '18/04/2026',
       time: '11:30',
-      title: 'Chung vui',
-      description: 'Tiệc cưới chính thức bắt đầu trong không khí rộn ràng và ấm cúng. Cùng nhau nâng ly chúc mừng hạnh phúc của đôi uyên ương, chia sẻ những khoảnh khắc đáng nhớ bên gia đình và bạn bè.',
-      icon: <Sparkles className="w-6 h-6" />
+      title: 'Khai tiệc',
+      description: 'Tiệc cưới chính thức bắt đầu trong không khí rộn ràng và ấm cúng.',
+      icon: <Sparkles className="w-8 h-8" />
     }
   ]
 
   return (
-    <section className="section-padding relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-0 w-72 h-72 bg-cosmic-500/5 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-nebula-500/5 rounded-full blur-3xl animate-float-delay-2" />
-      </div>
-
-      <div className="container-cosmic relative z-10">
+    <section id="timeline" className="section-padding bg-beige-50/30 relative">
+      <div className="container-minimal">
         {/* Section Header */}
         <motion.div
           ref={titleRef}
-          initial={{ opacity: 0, y: 50 }}
-          animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
-          <motion.div
-            animate={{ 
-              rotate: [0, 360],
-            }}
-            transition={{ 
-              duration: 20, 
-              repeat: Infinity, 
-              ease: "linear" 
-            }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full glass-cosmic mb-8"
-          >
-            <Clock className="w-8 h-8 text-cosmic-400" />
-          </motion.div>
-          
-          <h2 className="text-4xl lg:text-5xl font-display font-bold mb-6 bg-gradient-to-r from-cosmic-400 via-nebula-400 to-aurora-400 bg-clip-text text-transparent">
-            Lịch trình cưới
+          <h2 className="text-4xl sm:text-6xl font-display font-bold mb-6 text-gradient-gold">
+            Chương Trình Lễ Cưới
           </h2>
-          <p className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto">
-            Cùng tụi mình trải qua những khoảnh khắc đặc biệt trong ngày trọng đại
-          </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-cosmic-300 to-transparent mx-auto"></div>
         </motion.div>
 
         {/* Timeline Events */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto px-4">
           {events.map((event, index) => (
             <TimelineCard
               key={index}
@@ -107,60 +103,36 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ event, index }) => {
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-      className="group"
+      transition={{ duration: 0.8, delay: index * 0.2 }}
+      className="text-center group"
     >
-      <div className="relative">
-        {/* Card */}
-        <div className="glass-cosmic rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300">
-          {/* Icon */}
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-cosmic-500 to-nebula-500 text-white mb-6"
-          >
-            {event.icon}
-          </motion.div>
-
-          {/* Time */}
-          <div className="text-2xl lg:text-3xl font-bold text-cosmic-400 mb-4 font-mono">
-            {event.time}
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl lg:text-2xl font-display font-bold text-white mb-4">
-            {event.title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-white/70 leading-relaxed">
-            {event.description}
-          </p>
-        </div>
-
-        {/* Floating particles */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-cosmic-400 rounded-full"
-              style={{
-                left: `${20 + Math.random() * 60}%`,
-                top: `${20 + Math.random() * 60}%`,
-              }}
-              animate={{
-                y: [0, -15, 0],
-                opacity: [0.3, 1, 0.3],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 2 + Math.random(),
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
+      {/* Icon Area */}
+      <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-full mb-8 bg-white border border-cosmic-100 shadow-sm group-hover:shadow-xl transition-all duration-500 overflow-hidden">
+        <div className="absolute inset-0 bg-cosmic-50 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full" />
+        <div className="relative z-10 text-cosmic-400 group-hover:text-cosmic-600 transition-colors duration-500">
+          {event.icon}
         </div>
       </div>
+
+      {/* Date */}
+      <div className="text-sm font-medium mb-2 text-cosmic-500 uppercase tracking-wider">
+        {event.date}
+      </div>
+
+      {/* Time */}
+      <div className="text-3xl font-display font-bold mb-4 text-void-900 tracking-widest">
+        {event.time}
+      </div>
+
+      {/* Title */}
+      <h3 className="text-xl font-bold mb-4 text-void-800 uppercase tracking-wider">
+        {event.title}
+      </h3>
+
+      {/* Description */}
+      <p className="leading-relaxed text-void-500 font-serif italic text-base">
+        {event.description}
+      </p>
     </motion.div>
   )
 }
