@@ -15,6 +15,10 @@ RUN npm ci --silent
 # Copy source files
 COPY . .
 
+# Accept build argument for VITE_SHEET_URL
+ARG VITE_SHEET_URL
+ENV VITE_SHEET_URL=$VITE_SHEET_URL
+
 # Build the application with memory optimization
 RUN npm run build
 
